@@ -73,11 +73,21 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\Context\ProjectDbContext.cs" />
+    <Compile Include="Database\Entities\Article.cs" />
     <Compile Include="Database\Entities\Author.cs" />
+    <Compile Include="Database\Entities\Book.cs" />
+    <Compile Include="Database\Entities\Journal.cs" />
+    <Compile Include="Database\Entities\Keyword.cs" />
+    <Compile Include="Database\Entities\Publication.cs" />
+    <Compile Include="Database\Entities\Volume.cs" />
     <Compile Include="MainClass.cs" />
     <Compile Include="Migrations\202212151134127_First.cs" />
     <Compile Include="Migrations\202212151134127_First.designer.cs">
       <DependentUpon>202212151134127_First.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202212210658546_CreatedEntities.cs" />
+    <Compile Include="Migrations\202212210658546_CreatedEntities.designer.cs">
+      <DependentUpon>202212210658546_CreatedEntities.cs</DependentUpon>
     </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -95,6 +105,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Migrations\202212151134127_First.resx">
       <DependentUpon>202212151134127_First.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202212210658546_CreatedEntities.resx">
+      <DependentUpon>202212210658546_CreatedEntities.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
