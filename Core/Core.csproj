@@ -89,6 +89,10 @@
     <Compile Include="Migrations\202212210658546_CreatedEntities.designer.cs">
       <DependentUpon>202212210658546_CreatedEntities.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202212271421533_AddedMaxLenghts.cs" />
+    <Compile Include="Migrations\202212271421533_AddedMaxLenghts.designer.cs">
+      <DependentUpon>202212271421533_AddedMaxLenghts.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -108,6 +112,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202212210658546_CreatedEntities.resx">
       <DependentUpon>202212210658546_CreatedEntities.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202212271421533_AddedMaxLenghts.resx">
+      <DependentUpon>202212271421533_AddedMaxLenghts.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
