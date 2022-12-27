@@ -25,20 +25,73 @@ namespace View
     public partial class MainWindow : ThemedWindow
     {
         public ProjectDbContext _dbContext = new ProjectDbContext();
-        public MainWindow()
+
+        public List<string> PublicationTypes =  new List<string>() {"Article", "Book", "Journal" , "Publication", "Volume"};
+    public MainWindow()
         {
             InitializeComponent();
+            TypeFilter.ItemsSource = PublicationTypes;
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private void TypeFilter_SelectedIndexChanged(object sender, RoutedEventArgs e)
         {
-            AuthorsRepository authorsRepository = new AuthorsRepository(_dbContext);
+            string current_selection = TypeFilter.SelectedItem.ToString();
 
-            List<Author> names = authorsRepository.GetAuthors();
-
-         
-
-            girdulmeu.ItemsSource = names;
+            if(current_selection == "Article" )
+            {
+                FieldsFilter.ItemsSource = typeof(Article).GetProperties().Select(p => p.Name).Where(n => n != "Id" && n != "IsDeleted");
+                AuthorsRepository authorsRepository = new AuthorsRepository(_dbContext);
+                List<Author> names = authorsRepository.GetAuthors();
+                ListView.ItemsSource = names;
+            }
+            if(current_selection == "Book" )
+            {
+                FieldsFilter.ItemsSource = typeof(Book).GetProperties().Select(p => p.Name).Where(n => n != "Id" && n != "IsDeleted");
+            }
+            if(current_selection == "Journal" )
+            {
+                FieldsFilter.ItemsSource = typeof(Journal).GetProperties().Select(p => p.Name).Where(n => n != "Id" && n != "IsDeleted");
+            }
+            if(current_selection == "Publication")
+            {
+                FieldsFilter.ItemsSource = typeof(Publication).GetProperties().Select(p => p.Name).Where(n => n != "Id" && n != "IsDeleted");
+            }
+            if(current_selection == "Volume")
+            {
+                FieldsFilter.ItemsSource = typeof(Volume).GetProperties().Select(p => p.Name).Where(n => n != "Id" && n != "IsDeleted");
+            }
         }
+
+        private void SearchBar_GotFocus(object sender, RoutedEventArgs e)
+        {
+            SearchBar.Text = string.Empty;
+        }
+
+        private void SearchBar_LostFocus(object sender, RoutedEventArgs e)
+        {
+            SearchBar.Text = "Enter text...";
+        }
+
+        private void KeywordTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            KeywordTextBox.Text = string.Empty;
+        }
+
+        private void KeywordTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            KeywordTextBox.Text = "Enter a keyword...";
+        }
+
+        
+
+        //private void Button_Click(object sender, RoutedEventArgs e)
+        //{
+        //    AuthorsRepository authorsRepository = new AuthorsRepository(_dbContext);
+
+        //    List<Author> names = authorsRepository.GetAuthors();
+
+
+
+        //    girdulmeu.ItemsSource = names;
+        //}
     }
 }

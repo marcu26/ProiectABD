@@ -40,13 +40,23 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="DevExpress.Data.v22.2, Version=22.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Data.22.2.3\lib\net452\DevExpress.Data.v22.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Drawing.v22.2, Version=22.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Drawing.22.2.3\lib\net452\DevExpress.Drawing.v22.2.dll</HintPath>
+    </Reference>
+    <Reference Include="DevExpress.Images.v22.2, Version=22.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Images.22.2.3\lib\net452\DevExpress.Images.v22.2.dll</HintPath>
+    </Reference>
     <Reference Include="DevExpress.Mvvm.v22.2" />
     <Reference Include="DevExpress.Data.Desktop.v22.2" />
-    <Reference Include="DevExpress.Data.v22.2" />
     <Reference Include="DevExpress.Printing.v22.2.Core" />
     <Reference Include="DevExpress.Xpf.Core.v22.2" />
     <Reference Include="DevExpress.Xpf.Themes.Office2019Colorful.v22.2" />
-    <Reference Include="DevExpress.Drawing.v22.2" />
+    <Reference Include="DevExpress.Xpf.Themes.Win11Dark.v22.2, Version=22.2.3.0, Culture=neutral, PublicKeyToken=b88d1754d700e49a, processorArchitecture=MSIL">
+      <HintPath>..\packages\DevExpress.Wpf.Themes.Win11Dark.22.2.3\lib\net452\DevExpress.Xpf.Themes.Win11Dark.v22.2.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -86,14 +96,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ViewModels\MainViewModel.cs" />
-    <Compile Include="Views\MainView.xaml.cs">
-      <DependentUpon>MainView.xaml</DependentUpon>
-      <SubType>Code</SubType>
-    </Compile>
-    <Page Include="Views\MainView.xaml">
-      <Generator>MSBuild:Compile</Generator>
-      <SubType>Designer</SubType>
-    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -133,6 +135,9 @@
       <Project>{2321F909-3B8D-4FD4-82D7-8A158EE9F9C2}</Project>
       <Name>Infrastructure</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="listview_background.jpeg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

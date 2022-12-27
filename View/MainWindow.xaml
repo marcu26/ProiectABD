@@ -2,13 +2,57 @@
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
-    xmlns:Views="clr-namespace:View.Views"
-    xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="av" 
+    xmlns:av="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" xmlns:dxe="http://schemas.devexpress.com/winfx/2008/xaml/editors" mc:Ignorable="av" 
     x:Class="View.MainWindow"
-    Title="MainWindow" Height="800" Width="1000">
+    Title="MainWindow" Height="800" Width="1000" WindowStartupLocation="CenterScreen" ShowBackButton="True" ShowStatusPanel="True" TitleAlignment="Center">
+
     <Grid>
-        <Views:MainView/>
-        <DataGrid x:Name="girdulmeu"  Margin="0,0,0,392"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="445,618,0,0" VerticalAlignment="Top" Click="Button_Click"/>
+        <StackPanel Orientation="Vertical">
+            <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5">
+                <StackPanel.Background>
+                    <ImageBrush ImageSource="C:\Users\andre\Desktop\ProiectABD\View\searchbar_background.jpeg">
+                        <ImageBrush.RelativeTransform>
+                            <TransformGroup>
+                                <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleY="-1"/>
+                                <SkewTransform CenterX="0.5" CenterY="0.5"/>
+                                <RotateTransform CenterX="0.5" CenterY="0.5"/>
+                                <TranslateTransform/>
+                            </TransformGroup>
+                        </ImageBrush.RelativeTransform>
+                    </ImageBrush>
+                </StackPanel.Background>
+                <StackPanel Orientation="Horizontal">
+                    <dxe:ComboBoxEdit x:Name="TypeFilter" HorizontalAlignment="Left" Margin="40,20,0,0" VerticalAlignment="Top" Width="250" Height="40" FontSize="18" Text="Choose a publication type" SelectedIndexChanged="TypeFilter_SelectedIndexChanged"/>
+                    <TextBox x:Name="SearchBar" Margin="30,20,0,0" Text="Enter text..." TextWrapping="Wrap" VerticalAlignment="Top" Width="640" Height="40" FontSize="20" GotFocus="SearchBar_GotFocus" LostFocus="SearchBar_LostFocus"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Height="129">
+                    <dxe:ComboBoxEdit x:Name="FieldsFilter" HorizontalAlignment="Left" Margin="40,0,0,0" Width="440" Height="40" FontSize="18"
+                                      MaxHeight="90"
+                                      ValidateOnTextInput="True"
+                                      ValidateOnEnterKeyPressed="True"
+                                      AutoComplete="True"
+                                      IncrementalFiltering="True"
+                                      VerticalScrollBarVisibility="Auto"
+                                      ImmediatePopup="True">
+                        <dxe:ComboBoxEdit.StyleSettings>
+                            <dxe:TokenComboBoxStyleSettings NewTokenPosition="Far" EnableTokenWrapping="True" />
+                        </dxe:ComboBoxEdit.StyleSettings>
+                    </dxe:ComboBoxEdit>
+                    <TextBox x:Name="KeywordTextBox" Margin="30,0,0,0" Text="Enter a keyword..." TextWrapping="Wrap" HorizontalAlignment="Left" Width="450" Height="40" FontSize="20" GotFocus="KeywordTextBox_GotFocus" LostFocus="KeywordTextBox_LostFocus"/>
+                </StackPanel>
+            </StackPanel>
+            <DataGrid x:Name="ListView" Margin="0,0,0,0" Height="550" FontSize="14" HeadersVisibility="Column">
+                <DataGrid.Background>
+                    <ImageBrush ImageSource="C:\Users\andre\Desktop\ProiectABD\View\listview_background.jpeg"/>
+                </DataGrid.Background>
+                <DataGrid.RowStyle>
+                    <Style TargetType="DataGridRow">
+                        <Setter Property="Background" Value="{DynamicResource {x:Static DataGrid.BackgroundProperty}}" />
+                    </Style>
+                </DataGrid.RowStyle>
+
+
+            </DataGrid>
+        </StackPanel>
     </Grid>
 </dx:ThemedWindow>
