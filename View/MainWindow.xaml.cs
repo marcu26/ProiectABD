@@ -1,4 +1,8 @@
-﻿using DevExpress.Xpf.Core;
+﻿using Core.Database.Context;
+using Core.Database.Entities;
+using Core.Repositories;
+using DevExpress.Xpf.Core;
+using DevExpress.Xpf.Editors;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -20,9 +24,21 @@ namespace View
     /// </summary>
     public partial class MainWindow : ThemedWindow
     {
+        public ProjectDbContext _dbContext = new ProjectDbContext();
         public MainWindow()
         {
             InitializeComponent();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            AuthorsRepository authorsRepository = new AuthorsRepository(_dbContext);
+
+            List<Author> names = authorsRepository.GetAuthors();
+
+         
+
+            girdulmeu.ItemsSource = names;
         }
     }
 }
