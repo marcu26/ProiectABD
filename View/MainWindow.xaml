@@ -10,7 +10,7 @@
         <StackPanel Orientation="Vertical">
             <StackPanel Orientation="Vertical" RenderTransformOrigin="0.5,0.5">
                 <StackPanel.Background>
-                    <ImageBrush ImageSource="C:\Users\andre\Desktop\ProiectABD\View\searchbar_background.jpeg">
+                    <ImageBrush ImageSource="Backgrounds\searchbar_background.jpeg">
                         <ImageBrush.RelativeTransform>
                             <TransformGroup>
                                 <ScaleTransform CenterY="0.5" CenterX="0.5" ScaleY="-1"/>
@@ -54,7 +54,7 @@
             </StackPanel>
             <DataGrid x:Name="ListView" Margin="0,0,0,0" Height="550" FontSize="14" HeadersVisibility="Column">
                 <DataGrid.Background>
-                    <ImageBrush ImageSource="C:\Users\andre\Desktop\ProiectABD\View\listview_background.jpeg"/>
+                    <ImageBrush ImageSource="Backgrounds\listview_background.jpeg"/>
                 </DataGrid.Background>
                 <DataGrid.RowStyle>
                     <Style TargetType="DataGridRow">

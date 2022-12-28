@@ -139,6 +139,12 @@
   <ItemGroup>
     <Resource Include="listview_background.jpeg" />
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Backgrounds\listview_background.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Backgrounds\searchbar_background.jpeg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
