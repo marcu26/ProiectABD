@@ -42,6 +42,9 @@ namespace View
                 AuthorsRepository authorsRepository = new AuthorsRepository(_dbContext);
                 List<Author> names = authorsRepository.GetAuthors();
                 ListView.ItemsSource = names;
+
+                List<Keyword> keywords = _dbContext.Keywords.ToList();
+                KeywordFilter.ItemsSource = keywords;
             }
             if(current_selection == "Book" )
             {
@@ -71,17 +74,17 @@ namespace View
             SearchBar.Text = "Enter text...";
         }
 
-        private void KeywordTextBox_GotFocus(object sender, RoutedEventArgs e)
+        private void KeywordFilter_GotFocus(object sender, RoutedEventArgs e)
         {
-            KeywordTextBox.Text = string.Empty;
+            KeywordFilter.Text = string.Empty;
         }
 
-        private void KeywordTextBox_LostFocus(object sender, RoutedEventArgs e)
+        private void KeywordFilter_LostFocus(object sender, RoutedEventArgs e)
         {
-            KeywordTextBox.Text = "Enter a keyword...";
+            KeywordFilter.Text = "Enter a keyword...";
         }
 
-        
+
 
         //private void Button_Click(object sender, RoutedEventArgs e)
         //{

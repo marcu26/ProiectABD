@@ -38,7 +38,18 @@
                             <dxe:TokenComboBoxStyleSettings NewTokenPosition="Far" EnableTokenWrapping="True" />
                         </dxe:ComboBoxEdit.StyleSettings>
                     </dxe:ComboBoxEdit>
-                    <TextBox x:Name="KeywordTextBox" Margin="30,0,0,0" Text="Enter a keyword..." TextWrapping="Wrap" HorizontalAlignment="Left" Width="450" Height="40" FontSize="20" GotFocus="KeywordTextBox_GotFocus" LostFocus="KeywordTextBox_LostFocus"/>
+                    <dxe:ComboBoxEdit x:Name="KeywordFilter" HorizontalAlignment="Left" Margin="30,0,0,0" Width="450" Height="40" FontSize="18"
+                                      MaxHeight="90"
+                                      ValidateOnTextInput="True"
+                                      ValidateOnEnterKeyPressed="True"
+                                      AutoComplete="True"
+                                      IncrementalFiltering="True"
+                                      VerticalScrollBarVisibility="Auto"
+                                      ImmediatePopup="True" GotFocus="KeywordFilter_GotFocus" LostFocus="KeywordFilter_LostFocus">
+                        <dxe:ComboBoxEdit.StyleSettings>
+                            <dxe:TokenComboBoxStyleSettings NewTokenPosition="Far" EnableTokenWrapping="True" />
+                        </dxe:ComboBoxEdit.StyleSettings>
+                    </dxe:ComboBoxEdit>
                 </StackPanel>
             </StackPanel>
             <DataGrid x:Name="ListView" Margin="0,0,0,0" Height="550" FontSize="14" HeadersVisibility="Column">
