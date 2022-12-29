@@ -53,6 +53,9 @@
                 </StackPanel>
             </StackPanel>
             <DataGrid x:Name="ListView" Margin="0,0,0,0" Height="550" FontSize="14" HeadersVisibility="Column">
+                <DataGrid.RowBackground>
+                    <ImageBrush/>
+                </DataGrid.RowBackground>
                 <DataGrid.Background>
                     <ImageBrush ImageSource="Backgrounds\listview_background.jpeg"/>
                 </DataGrid.Background>

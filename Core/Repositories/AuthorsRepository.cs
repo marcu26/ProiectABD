@@ -3,6 +3,7 @@ using Core.Database.Entities;
 using Infrastructure.Base;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -18,9 +19,9 @@ namespace Core.Repositories
             _dbContext = dbContext;
         }
 
-        public List<Author> GetAuthors() 
+        public async Task<List<string>> GetAuthorsAsync() 
         {
-            return _dbContext.Authors.ToList();
+            return await _dbContext.Authors.Select(a => a.FullName).ToListAsync();
         }
     }
 }
