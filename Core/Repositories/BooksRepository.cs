@@ -21,9 +21,14 @@ namespace Core.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<List<BooksDto>> GetBooksDtoByFilters(string _ISBN, string title, string description, List<string> authors) 
+        public async Task<List<BooksDto>> GetBooksDtoByFilters(string _ISBN, string title, string description, List<string> authors, int pageNumber) 
         {
-            List<Book> intermediaryList = await _dbContext.Books.Include(b => b.Authors).ToListAsync();
+            List<Book> intermediaryList = await _dbContext.Books
+                .Include(b => b.Authors)
+                .OrderBy(b => b.Title)
+                .Skip((pageNumber - 1) * 50)
+                .Take(50)
+                .ToListAsync();
 
             List<BooksDto> books = intermediaryList.Select(b => new BooksDto
             {

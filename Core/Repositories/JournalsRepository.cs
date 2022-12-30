@@ -18,7 +18,7 @@ namespace Core.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<List<JournalsDto>> GetJournalsDtoByFiltersAsync(string name, string ISSN) 
+        public async Task<List<JournalsDto>> GetJournalsDtoByFiltersAsync(string name, string ISSN, int pageNumber) 
         {
             var list = await _dbContext.Journals
                 .Include(j => j.Volumes)
@@ -30,6 +30,9 @@ namespace Core.Repositories
                     JournalId = j.Id,
                     NumberOfVolumes = j.Volumes.Count
                 })
+                .OrderBy(j=>j.JournalName)
+                .Skip((pageNumber - 1) * 50)
+                .Take(50)
                 .ToListAsync();
 
             if(name != null) 
@@ -45,7 +48,7 @@ namespace Core.Repositories
             return list;
         }
 
-        public async Task<List<JournalsDto>> GetJournalsDtoByPublicationIdAsync(int publicationId) 
+        public async Task<List<JournalsDto>> GetJournalsDtoByPublicationIdAsync(int publicationId, int pageNumber) 
         {
             return await _dbContext.Journals
                .Include(j => j.Volumes)
@@ -57,6 +60,9 @@ namespace Core.Repositories
                    JournalId = j.Id,
                    NumberOfVolumes = j.Volumes.Count
                })
+               .OrderBy(j=>j.JournalName)
+               .Skip((pageNumber - 1) * 50)
+               .Take(50)
                .ToListAsync();
         }
     }

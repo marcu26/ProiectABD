@@ -20,7 +20,7 @@ namespace Core.Repositories
         {
         _dbContext = dbContext;
         }
-        public async Task<List<VolumesDto>> GetVolumesDtoByFiltersAsync(int number, int startYear, int endYear) 
+        public async Task<List<VolumesDto>> GetVolumesDtoByFiltersAsync(int number, int startYear, int endYear, int pageNumber) 
         {
             var list = await _dbContext.Volumes
                 .Include(v => v.Articles)
@@ -31,7 +31,10 @@ namespace Core.Repositories
                     VolumeNumber =v.Number,
                     NumberOfArticles = v.Articles.Count,
                     PublishedDate = v.PublishedDate
-                }).ToListAsync();
+                })
+                .Skip((pageNumber - 1) * 50)
+                .Take(50)
+                .ToListAsync();
 
             if (number > 0)
                 list = list.FindAll(v => v.VolumeNumber == number);
@@ -44,7 +47,7 @@ namespace Core.Repositories
             return list;
         }
 
-        public async Task<List<VolumesDto>> GetVolumesDtoByJournalId(int journalId) 
+        public async Task<List<VolumesDto>> GetVolumesDtoByJournalId(int journalId, int pageNumber) 
         {
             return await _dbContext.Volumes
                .Include(v => v.Articles)
@@ -55,7 +58,11 @@ namespace Core.Repositories
                    VolumeNumber = v.Number,
                    NumberOfArticles = v.Articles.Count,
                    PublishedDate = v.PublishedDate
-               }).ToListAsync();
+               })
+               .OrderBy(v=>v.PublishedDate) 
+               .Skip((pageNumber - 1) * 50)
+               .Take(50)
+               .ToListAsync();
         }
 
 

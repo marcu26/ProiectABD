@@ -23,12 +23,15 @@ namespace Core.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<List<ArticlesDto>> GetArticlesDtoByFiltersAsync(string title, string _abstract, List<string> authors, List<string> keywords) 
+        public async Task<List<ArticlesDto>> GetArticlesDtoByFiltersAsync(string title, string _abstract, List<string> authors, List<string> keywords, int pageNumber) 
         {
             List<Article> intermediaryList = await _dbContext.Articles
                 .Include(ar => ar.Authors)
                 .Include(ar => ar.Keywords)
                 .Where(ar => !ar.IsDeleted)
+                .OrderBy(ar=>ar.Title)
+                .Skip((pageNumber-1)*50)
+                .Take(50)
                 .ToListAsync();
 
             List<ArticlesDto> articles = intermediaryList.Select(ar => new ArticlesDto
@@ -97,12 +100,15 @@ namespace Core.Repositories
             return articles;
         }
 
-        public async Task<List<ArticlesDto>> GetArticlesDtoByVolumeId(int volumeId) 
+        public async Task<List<ArticlesDto>> GetArticlesDtoByVolumeId(int volumeId, int pageNumber) 
         {
             List<Article> articles = await _dbContext.Articles
                 .Include(ar => ar.Authors)
                 .Include(ar=>ar.Keywords)
                 .Where(ar => ar.VolumeId == volumeId && !ar.IsDeleted)
+                .OrderBy(ar=>ar.Title)
+                .Skip((pageNumber - 1) * 50)
+                .Take(50)
                 .ToListAsync();
 
 

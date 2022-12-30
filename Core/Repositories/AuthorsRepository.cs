@@ -21,7 +21,7 @@ namespace Core.Repositories
 
         public async Task<List<string>> GetAuthorsAsync() 
         {
-            return await _dbContext.Authors.Select(a => a.FullName).ToListAsync();
+            return await _dbContext.Authors.OrderBy(a=>a.FullName).Select(a => a.FullName).ToListAsync();
         }
     }
 }

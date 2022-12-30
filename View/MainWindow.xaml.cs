@@ -128,7 +128,7 @@ namespace View
                     abstractFilter = null;
                 }
 
-                List<ArticlesDto> articles = await _articlesRepository.GetArticlesDtoByFiltersAsync(titleFilter, abstractFilter, selectedAuthors, selectedKeywords);
+                List<ArticlesDto> articles = await _articlesRepository.GetArticlesDtoByFiltersAsync(titleFilter, abstractFilter, selectedAuthors, selectedKeywords,1);
                 DataGrid.AutoGenerateColumns = true;
                 operationsColumn.Visibility = Visibility.Hidden;
                 DataGrid.ColumnWidth = DataGridLength.Auto;
@@ -161,7 +161,7 @@ namespace View
                     ISBNFilter = null;
                 }
 
-                List<BooksDto> books = await _booksRepository.GetBooksDtoByFilters(ISBNFilter, titleFilter, descriptionFilter, selectedAuthors);
+                List<BooksDto> books = await _booksRepository.GetBooksDtoByFilters(ISBNFilter, titleFilter, descriptionFilter, selectedAuthors,1);
                 DataGrid.AutoGenerateColumns = true;
                 operationsColumn.Visibility = Visibility.Hidden;
                 DataGrid.ColumnWidth = DataGridLength.Auto;
@@ -187,7 +187,7 @@ namespace View
                 }
 
 
-                List<JournalsDto> journals = await _journalsRepository.GetJournalsDtoByFiltersAsync(titleFilter,ISSNFilter);
+                List<JournalsDto> journals = await _journalsRepository.GetJournalsDtoByFiltersAsync(titleFilter,ISSNFilter,1);
                 DataGrid.AutoGenerateColumns = true;
                 operationsColumn.Visibility = Visibility.Visible;
                 DataGrid.ColumnWidth = DataGridLength.Auto;
@@ -227,7 +227,7 @@ namespace View
                     end = Int32.Parse(endYear);
                 }
 
-                List<PublicationsDto> publications = await _publicationsRepository.GetPublicationsDtoByFiltersAsync(titleFilter, start,end);
+                List<PublicationsDto> publications = await _publicationsRepository.GetPublicationsDtoByFiltersAsync(titleFilter, start,end, 1);
                 DataGrid.AutoGenerateColumns = true;
                 operationsColumn.Visibility = Visibility.Visible;
                 DataGrid.ColumnWidth = DataGridLength.Auto;
@@ -272,7 +272,7 @@ namespace View
                     end = Int32.Parse(endYear);
                 }
 
-                List<VolumesDto> volumes = await _volumesRepository.GetVolumesDtoByFiltersAsync(volNo, start, end);
+                List<VolumesDto> volumes = await _volumesRepository.GetVolumesDtoByFiltersAsync(volNo, start, end, 1);
                 DataGrid.AutoGenerateColumns = true;
                 operationsColumn.Visibility = Visibility.Visible;
                 DataGrid.ColumnWidth = DataGridLength.Auto;
@@ -291,7 +291,7 @@ namespace View
                 operationsColumn.Header = "Go to Articles";
                 Button button = sender as Button;
                 VolumesDto volume = button.DataContext as VolumesDto;
-                List<ArticlesDto> articles = await _articlesRepository.GetArticlesDtoByVolumeId(volume.VolumeId);
+                List<ArticlesDto> articles = await _articlesRepository.GetArticlesDtoByVolumeId(volume.VolumeId, 1);
                 DataGrid.AutoGenerateColumns = true;
                 operationsColumn.Visibility = Visibility.Hidden;
                 DataGrid.ColumnWidth = DataGridLength.Auto;
@@ -305,7 +305,7 @@ namespace View
                 operationsColumn.Header = "Go to Volumes";
                 Button button = sender as Button;
                 JournalsDto journal = button.DataContext as JournalsDto;
-                List<VolumesDto> volumes = await _volumesRepository.GetVolumesDtoByJournalId(journal.JournalId);
+                List<VolumesDto> volumes = await _volumesRepository.GetVolumesDtoByJournalId(journal.JournalId, 1);
                 DataGrid.AutoGenerateColumns = true;
                 operationsColumn.Visibility = Visibility.Visible;
                 DataGrid.ColumnWidth = DataGridLength.Auto;
@@ -319,7 +319,7 @@ namespace View
                 operationsColumn.Header = "Go to Journals";
                 Button button = sender as Button;
                 PublicationsDto publication = button.DataContext as PublicationsDto;
-                List<JournalsDto> journals = await _journalsRepository.GetJournalsDtoByPublicationIdAsync(publication.PublicationId);
+                List<JournalsDto> journals = await _journalsRepository.GetJournalsDtoByPublicationIdAsync(publication.PublicationId, 1);
                 DataGrid.AutoGenerateColumns = true;
                 operationsColumn.Visibility = Visibility.Visible;
                 DataGrid.ColumnWidth = DataGridLength.Auto;

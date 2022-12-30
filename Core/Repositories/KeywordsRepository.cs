@@ -22,7 +22,7 @@ namespace Core.Repositories
 
         public async Task<List<string>> GetKeywordsAsync() 
         {
-            return await _dbContext.Keywords.Select(k => k.Word).ToListAsync();
+            return await _dbContext.Keywords.OrderBy(k=>k.Word).Select(k => k.Word).ToListAsync();
         }
 
 

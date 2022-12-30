@@ -19,7 +19,7 @@ namespace Core.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<List<PublicationsDto>> GetPublicationsDtoByFiltersAsync(string name, int startYear, int endYear)
+        public async Task<List<PublicationsDto>> GetPublicationsDtoByFiltersAsync(string name, int startYear, int endYear, int pageNumber)
         {
             var list = await _dbContext.Publications
                 .Include(p => p.Journals)
@@ -31,6 +31,9 @@ namespace Core.Repositories
                 PublicationName = p.Name,
                 NumberOfJournals = p.Journals.Count
             })
+                .OrderBy(p=>p.PublicationName)
+                .Skip((pageNumber - 1) * 50)
+                .Take(50)
                 .ToListAsync();
 
             if(name != null) 
