@@ -8,7 +8,7 @@
     mc:Ignorable="av" 
     xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
     x:Class="View.MainWindow"
-    Title="Science Time" Height="1000" Width="1800" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" ShowBackButton="False" ShowStatusPanel="True" TitleAlignment="Center"
+   Title="Science Time" Height="900" Width="1750" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" ShowBackButton="False" ShowStatusPanel="True" TitleAlignment="Center"
     Background="Transparent"
     Icon="Backgrounds\clock_icon.png">
 
@@ -54,28 +54,28 @@
                                 </StackPanel>
                             </Button>
 
-                            <Button x:Name="BooksButton" Style="{StaticResource menuButton}">
+                            <Button x:Name="BooksButton" Style="{StaticResource menuButton}" Click="BooksButton_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <Icon:PackIconMaterial Kind="BookEducationOutline" Style="{StaticResource menuButtonIcon}"/>
                                     <TextBlock Text="Books" FontSize="18"/>
                                 </StackPanel>
                             </Button>
 
-                            <Button x:Name="JournalsButton" Style="{StaticResource menuButton}">
+                            <Button x:Name="JournalsButton" Style="{StaticResource menuButton}" Click="JournalsButton_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <Icon:PackIconMaterial Kind="NotebookOutline" Style="{StaticResource menuButtonIcon}"/>
                                     <TextBlock Text="Journals" FontSize="18"/>
                                 </StackPanel>
                             </Button>
 
-                            <Button x:Name="PublicationsButton" Style="{StaticResource menuButton}">
+                            <Button x:Name="PublicationsButton" Style="{StaticResource menuButton}" Click="PublicationsButton_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <Icon:PackIconMaterial Kind="NewspaperVariantMultipleOutline" Style="{StaticResource menuButtonIcon}"/>
                                     <TextBlock Text="Publications" FontSize="18"/>
                                 </StackPanel>
                             </Button>
 
-                            <Button x:Name="VolumesButton" Style="{StaticResource menuButton}">
+                            <Button x:Name="VolumesButton" Style="{StaticResource menuButton}" Click="VolumesButton_Click">
                                 <StackPanel Orientation="Horizontal">
                                     <Icon:PackIconMaterial Kind="ForumOutline" Style="{StaticResource menuButtonIcon}"/>
                                     <TextBlock Text="Volumes" FontSize="18"/>
@@ -105,10 +105,9 @@
                             </dxe:ComboBoxEdit>
 
                             <StackPanel x:Name="YearStackPanel" Margin="30 50">
-                                <Label Content="Year" HorizontalAlignment="Center" FontSize="18">
-                                </Label>
-                                    <TextBox Margin="30 10" Text="From"></TextBox>
-                                <TextBox Margin="30 10" Text="To"></TextBox>
+                                <Label Content="Year" HorizontalAlignment="Center" FontSize="18"></Label>
+                                <TextBox x:Name="startYearTextBox" Margin="30 10" Text="From" GotFocus="startYearTextBox_GotFocus" LostFocus="startYearTextBox_LostFocus"></TextBox>
+                                <TextBox x:Name="endYearTextBox" Margin="30 10" Text="To" GotFocus="endYearTextBox_GotFocus" LostFocus="endYearTextBox_LostFocus"></TextBox>
                             </StackPanel>
 
                             
@@ -196,20 +195,32 @@
                 <!--Counter Title-->
                 <TextBlock Text="Search results" Grid.Row="4" FontSize="18" FontWeight="SemiBold" Foreground="#121518" HorizontalAlignment="Left" VerticalAlignment="Center"/>
 
-                <TextBlock Text="Filter by" Grid.Row="4" FontSize="13" FontWeight="SemiBold" Margin="0 0 215 0" Foreground="#121518" HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                <!--<TextBlock Text="Filter by" Grid.Row="4" FontSize="13" FontWeight="SemiBold" Margin="0 0 215 0" Foreground="#121518" HorizontalAlignment="Right" VerticalAlignment="Center"/>
 
-                <!--Filter Textbox-->
+                --><!--Filter Textbox--><!--
                 <Grid Width="200" HorizontalAlignment="Right" Grid.Row="4">
                     <TextBlock Margin="15 0" VerticalAlignment="Center" Foreground="#B0B9C6" IsHitTestVisible="False"
                            Panel.ZIndex="1" Text="Search in Members ..."
                            Visibility="{Binding ElementName=textBoxFilter, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
 
                     <TextBox Name="textBoxFilter" Style="{StaticResource filterTextBox}"/>
-                </Grid>
+                </Grid>-->
 
                 <!--Members Data Grid-->
-                <DataGrid x:Name="DataGrid" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}" Style="{DynamicResource DataGridStyle1}">
-                    
+                <DataGrid x:Name="DataGrid" AutoGenerateColumns="True" RowStyle="{DynamicResource DataGridRowStyle1}" ColumnHeaderStyle="{DynamicResource DataGridColumnHeaderStyle1}" CellStyle="{DynamicResource DataGridCellStyle1}" Style="{DynamicResource DataGridStyle1}">
+                    <DataGrid.Columns>
+                        <DataGridTemplateColumn x:Name="operationsColumn" IsReadOnly="True" Width="auto">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <Button x:Name="navigationButton" Style="{StaticResource gridEditButton}" Click="navigationButton_Click">
+                                            <Icon:PackIconMaterial Kind="NavigationVariantOutline" Style="{StaticResource gridButtonIcon}"/>
+                                        </Button>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
                 </DataGrid>
 
                 <!--Pagingation Section-->

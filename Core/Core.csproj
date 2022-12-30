@@ -82,6 +82,7 @@
     <Compile Include="Database\Entities\Volume.cs" />
     <Compile Include="Dtos\Articles\ArticlesDto.cs" />
     <Compile Include="Dtos\Books\BooksDto.cs" />
+    <Compile Include="Dtos\Journals\JournalRowDto.cs" />
     <Compile Include="Dtos\Journals\JournalsDto.cs" />
     <Compile Include="Dtos\Publications\PublicationsDto.cs" />
     <Compile Include="Dtos\Volumes\VolumesDto.cs" />

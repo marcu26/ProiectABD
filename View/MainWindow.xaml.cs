@@ -69,6 +69,8 @@ namespace View
         private bool IsMaximize = false;
 
         private static string LastTypeSelected;
+
+        private static string LastTypeLoaded;
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             if (e.ClickCount == 2)
@@ -100,39 +102,234 @@ namespace View
 
         private async void searchButton_Click(object sender, RoutedEventArgs e)
         {
-
-            List<string> selectedAuthors = AuthorsComboBox.SelectedItems.Cast<string>().ToList();
-            if(selectedAuthors.Count() == 0)
+            if (LastTypeSelected == "Articles")
             {
-                selectedAuthors = null;
+                List<string> selectedAuthors = AuthorsComboBox.SelectedItems.Cast<string>().ToList();
+                if (selectedAuthors.Count() == 0)
+                {
+                    selectedAuthors = null;
+                }
+
+                List<string> selectedKeywords = KeywordsComboBox.SelectedItems.Cast<string>().ToList();
+                if (selectedKeywords.Count() == 0)
+                {
+                    selectedKeywords = null;
+                }
+
+                string titleFilter = searchBar1.Text;
+                if (String.IsNullOrEmpty(titleFilter))
+                {
+                    titleFilter = null;
+                }
+
+                string abstractFilter = searchBar2.Text;
+                if (String.IsNullOrEmpty(abstractFilter))
+                {
+                    abstractFilter = null;
+                }
+
+                List<ArticlesDto> articles = await _articlesRepository.GetArticlesDtoByFiltersAsync(titleFilter, abstractFilter, selectedAuthors, selectedKeywords);
+                DataGrid.AutoGenerateColumns = true;
+                operationsColumn.Visibility = Visibility.Hidden;
+                DataGrid.ColumnWidth = DataGridLength.Auto;
+                DataGrid.ItemsSource = articles;
             }
 
-            List<string> selectedKeywords = KeywordsComboBox.SelectedItems.Cast<string>().ToList();
-            if(selectedKeywords.Count() == 0)
+            if(LastTypeSelected == "Books")
             {
-                selectedKeywords = null;
+                List<string> selectedAuthors = AuthorsComboBox.SelectedItems.Cast<string>().ToList();
+                if (selectedAuthors.Count() == 0)
+                {
+                    selectedAuthors = null;
+                }
+
+                string titleFilter = searchBar1.Text;
+                if (String.IsNullOrEmpty(titleFilter))
+                {
+                    titleFilter = null;
+                }
+
+                string descriptionFilter = searchBar2.Text;
+                if (String.IsNullOrEmpty(descriptionFilter))
+                {
+                    descriptionFilter = null;
+                }
+
+                string ISBNFilter = searchBar3.Text;
+                if (String.IsNullOrEmpty(ISBNFilter))
+                {
+                    ISBNFilter = null;
+                }
+
+                List<BooksDto> books = await _booksRepository.GetBooksDtoByFilters(ISBNFilter, titleFilter, descriptionFilter, selectedAuthors);
+                DataGrid.AutoGenerateColumns = true;
+                operationsColumn.Visibility = Visibility.Hidden;
+                DataGrid.ColumnWidth = DataGridLength.Auto;
+                DataGrid.ItemsSource = books;
             }
 
-            string titleFilter = searchBar1.Text;
-            if (String.IsNullOrEmpty(titleFilter))
+            if(LastTypeSelected == "Journals")
             {
-                titleFilter = null;
+                LastTypeLoaded = "Journals";
+
+                operationsColumn.Header = "Go to Volumes";
+
+                string titleFilter = searchBar1.Text;
+                if (String.IsNullOrEmpty(titleFilter))
+                {
+                    titleFilter = null;
+                }
+
+                string ISSNFilter = searchBar2.Text;
+                if (String.IsNullOrEmpty(ISSNFilter))
+                {
+                    ISSNFilter = null;
+                }
+
+
+                List<JournalsDto> journals = await _journalsRepository.GetJournalsDtoByFiltersAsync(titleFilter,ISSNFilter);
+                DataGrid.AutoGenerateColumns = true;
+                operationsColumn.Visibility = Visibility.Visible;
+                DataGrid.ColumnWidth = DataGridLength.Auto;
+                DataGrid.ItemsSource = journals;
             }
 
-            string abstractFilter = searchBar2.Text;
-            if (String.IsNullOrEmpty(abstractFilter))
+            if(LastTypeSelected == "Publications")
             {
-                abstractFilter = null;
+                LastTypeLoaded = "Publications";
+
+                operationsColumn.Header = "Go to Journals";
+
+                string titleFilter = searchBar1.Text;
+                if (String.IsNullOrEmpty(titleFilter))
+                {
+                    titleFilter = null;
+                }
+
+                int start,end;
+                string startYear = startYearTextBox.Text;
+                if (String.IsNullOrEmpty(startYear) || startYear == "From")
+                {
+                    start = 0;
+                }
+                else
+                {
+                    start = Int32.Parse(startYear);
+                }
+
+                string endYear = endYearTextBox.Text;
+                if (String.IsNullOrEmpty(endYear) || endYear == "To")
+                {
+                    end = 0;
+                }
+                else
+                {
+                    end = Int32.Parse(endYear);
+                }
+
+                List<PublicationsDto> publications = await _publicationsRepository.GetPublicationsDtoByFiltersAsync(titleFilter, start,end);
+                DataGrid.AutoGenerateColumns = true;
+                operationsColumn.Visibility = Visibility.Visible;
+                DataGrid.ColumnWidth = DataGridLength.Auto;
+                DataGrid.ItemsSource = publications;
             }
 
-            List<ArticlesDto> articles = await _articlesRepository.GetArticlesDtoByFiltersAsync(titleFilter, abstractFilter, selectedAuthors, selectedKeywords);
-            DataGrid.AutoGenerateColumns = true;
-            DataGrid.ItemsSource = articles;
+            if(LastTypeSelected == "Volumes")
+            {
+                LastTypeLoaded = "Volumes";
+
+                operationsColumn.Header = "Go to Articles";
+
+                int volNo;
+                string volumeNumber = searchBar1.Text;
+                if (String.IsNullOrEmpty(volumeNumber))
+                {
+                    volNo = 0;
+                }
+                else
+                {
+                    volNo = Int32.Parse(volumeNumber);
+                }
+
+                int start, end;
+                string startYear = startYearTextBox.Text;
+                if (String.IsNullOrEmpty(startYear) || startYear == "From")
+                {
+                    start = 0;
+                }
+                else
+                {
+                    start = Int32.Parse(startYear);
+                }
+
+                string endYear = endYearTextBox.Text;
+                if (String.IsNullOrEmpty(endYear) || endYear == "To")
+                {
+                    end = 0;
+                }
+                else
+                {
+                    end = Int32.Parse(endYear);
+                }
+
+                List<VolumesDto> volumes = await _volumesRepository.GetVolumesDtoByFiltersAsync(volNo, start, end);
+                DataGrid.AutoGenerateColumns = true;
+                operationsColumn.Visibility = Visibility.Visible;
+                DataGrid.ColumnWidth = DataGridLength.Auto;
+                DataGrid.ItemsSource = volumes;
+            }
+
+        }
+
+        private async void navigationButton_Click(object sender, RoutedEventArgs e)
+        {
+
+            if (LastTypeLoaded == "Volumes")
+            {
+                LastTypeLoaded = "Articles";
+
+                operationsColumn.Header = "Go to Articles";
+                Button button = sender as Button;
+                VolumesDto volume = button.DataContext as VolumesDto;
+                List<ArticlesDto> articles = await _articlesRepository.GetArticlesDtoByVolumeId(volume.VolumeId);
+                DataGrid.AutoGenerateColumns = true;
+                operationsColumn.Visibility = Visibility.Hidden;
+                DataGrid.ColumnWidth = DataGridLength.Auto;
+                DataGrid.ItemsSource = articles;
+            }
+
+            if (LastTypeLoaded == "Journals")
+            {
+                LastTypeLoaded = "Volumes";
+
+                operationsColumn.Header = "Go to Volumes";
+                Button button = sender as Button;
+                JournalsDto journal = button.DataContext as JournalsDto;
+                List<VolumesDto> volumes = await _volumesRepository.GetVolumesDtoByJournalId(journal.JournalId);
+                DataGrid.AutoGenerateColumns = true;
+                operationsColumn.Visibility = Visibility.Visible;
+                DataGrid.ColumnWidth = DataGridLength.Auto;
+                DataGrid.ItemsSource = volumes;
+            }
+
+            if (LastTypeLoaded == "Publications")
+            {
+                LastTypeLoaded = "Journals";
+
+                operationsColumn.Header = "Go to Journals";
+                Button button = sender as Button;
+                PublicationsDto publication = button.DataContext as PublicationsDto;
+                List<JournalsDto> journals = await _journalsRepository.GetJournalsDtoByPublicationIdAsync(publication.PublicationId);
+                DataGrid.AutoGenerateColumns = true;
+                operationsColumn.Visibility = Visibility.Visible;
+                DataGrid.ColumnWidth = DataGridLength.Auto;
+                DataGrid.ItemsSource = journals;
+            }
         }
 
         private async void ArticlesButton_Click(object sender, RoutedEventArgs e)
         {
-            LastTypeSelected = "Article";
+            LastTypeSelected = "Articles";
             sBar1TextBlock.Text = "Title";
             sBar2TextBlock.Text = "Description";
             sGrid2.Visibility = Visibility.Visible;
@@ -146,11 +343,94 @@ namespace View
             AuthorsComboBox.ItemsSource = authors;
 
             List<string> keywords = await _keywordsRepository.GetKeywordsAsync();
-            KeywordsComboBox.ItemsSource = keywords;
-
-
-            
+            KeywordsComboBox.ItemsSource = keywords;          
         }
+
+        private async void BooksButton_Click(object sender, RoutedEventArgs e)
+        {
+            LastTypeSelected = "Books";
+
+            sBar1TextBlock.Text = "Title";
+            sBar2TextBlock.Text = "Description";
+            sBar3TextBlock.Text = "ISBN";
+            sGrid2.Visibility = Visibility.Visible;
+            sGrid3.Visibility = Visibility.Visible;
+            sGrid4.Visibility = Visibility.Hidden;
+            YearStackPanel.Visibility = Visibility.Hidden;
+            AuthorsComboBox.Visibility = Visibility.Visible;
+            KeywordsComboBox.Visibility = Visibility.Hidden;
+
+            List<string> authors = await _authorsRepository.GetAuthorsAsync();
+            AuthorsComboBox.ItemsSource = authors;
+        }
+
+        private void JournalsButton_Click(object sender, RoutedEventArgs e)
+        {
+            LastTypeSelected = "Journals";
+
+            sBar1TextBlock.Text = "Title";
+            sBar2TextBlock.Text = "ISSN";
+            sGrid2.Visibility = Visibility.Visible;
+            sGrid3.Visibility = Visibility.Hidden;
+            sGrid4.Visibility = Visibility.Hidden;
+            YearStackPanel.Visibility = Visibility.Hidden;
+            AuthorsComboBox.Visibility = Visibility.Hidden;
+            KeywordsComboBox.Visibility = Visibility.Hidden;
+        }
+
+        private void PublicationsButton_Click(object sender, RoutedEventArgs e)
+        {
+            LastTypeSelected = "Publications";
+
+            sBar1TextBlock.Text = "Title";
+            sGrid2.Visibility = Visibility.Hidden;
+            sGrid3.Visibility = Visibility.Hidden;
+            sGrid4.Visibility = Visibility.Hidden;
+            YearStackPanel.Visibility = Visibility.Visible;
+            AuthorsComboBox.Visibility = Visibility.Hidden;
+            KeywordsComboBox.Visibility = Visibility.Hidden;
+        }
+
+        private void VolumesButton_Click(object sender, RoutedEventArgs e)
+        {
+            LastTypeSelected = "Volumes";
+
+            sBar1TextBlock.Text = "Volume number";
+            sGrid2.Visibility = Visibility.Hidden;
+            sGrid3.Visibility = Visibility.Hidden;
+            sGrid4.Visibility = Visibility.Hidden;
+            YearStackPanel.Visibility = Visibility.Visible;
+            AuthorsComboBox.Visibility = Visibility.Hidden;
+            KeywordsComboBox.Visibility = Visibility.Hidden;
+        }
+
+        private void startYearTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            startYearTextBox.Text = string.Empty;
+        }
+
+        private void startYearTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (String.IsNullOrEmpty(startYearTextBox.Text))
+            {
+                startYearTextBox.Text = "From";
+            }
+        }
+
+        private void endYearTextBox_GotFocus(object sender, RoutedEventArgs e)
+        {
+            endYearTextBox.Text = string.Empty;
+        }
+
+        private void endYearTextBox_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (String.IsNullOrEmpty(endYearTextBox.Text))
+            {
+                endYearTextBox.Text = "To";
+            }
+        }
+
+
         //private async void TypeFilter_SelectedIndexChanged(object sender, RoutedEventArgs e)
         //{
         //    string current_selection = TypeFilter.SelectedItem.ToString();

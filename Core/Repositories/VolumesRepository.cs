@@ -36,9 +36,11 @@ namespace Core.Repositories
             if (number > 0)
                 list = list.FindAll(v => v.VolumeNumber == number);
 
-            if (startYear <= endYear)
-                list = list.FindAll(v => v.PublishedDate.Year >= startYear && v.PublishedDate.Year <= endYear);
-
+            if (startYear != 0 && endYear != 0)
+            {
+                if (startYear <= endYear)
+                    list = list.FindAll(v => v.PublishedDate.Year >= startYear && v.PublishedDate.Year <= endYear);
+            }
             return list;
         }
 

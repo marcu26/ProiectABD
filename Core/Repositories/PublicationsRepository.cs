@@ -38,9 +38,12 @@ namespace Core.Repositories
                 list = list.FindAll(p => p.PublicationName.Contains(name));
             }
 
-            if(startYear <= endYear) 
+            if (startYear != 0 && endYear != 0)
             {
-                list = list.FindAll(p => p.PublishedDate.Year>=startYear && p.PublishedDate.Year<=endYear);
+                if (startYear <= endYear)
+                {
+                    list = list.FindAll(p => p.PublishedDate.Year >= startYear && p.PublishedDate.Year <= endYear);
+                }
             }
 
             return list;
