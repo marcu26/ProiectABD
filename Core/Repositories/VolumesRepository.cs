@@ -32,6 +32,7 @@ namespace Core.Repositories
                     NumberOfArticles = v.Articles.Count,
                     PublishedDate = v.PublishedDate
                 })
+                .OrderBy(v => v.VolumeId)
                 .Skip((pageNumber - 1) * 50)
                 .Take(50)
                 .ToListAsync();
