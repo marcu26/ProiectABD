@@ -65,32 +65,23 @@ namespace View
             KeywordsComboBox.Visibility = Visibility.Hidden;
         }
 
+        private enum ObjectType {Articles, Books, Journals, Volumes, Publications};
 
         private bool IsMaximize = false;
 
-        private static string LastTypeSelected;
+        private static int CurrentPage = 1;
 
-        private static string LastTypeLoaded;
-        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.ClickCount == 2)
-            {
-                if (IsMaximize)
-                {
-                    this.WindowState = WindowState.Normal;
-                    this.Width = 1080;
-                    this.Height = 720;
+        private string LastArticleTitleFilter, LastArticleAbstractFilter, LastBooksISBNFilter, LastBooksTitleFilter, LastBooksDescriptionFilter, LastJournalsTitleFilter, LastJournalsISSNFilter, LastPublicationsTitleFilter;
 
-                    IsMaximize = false;
-                }
-                else
-                {
-                    this.WindowState = WindowState.Maximized;
+        private int LastPublicationsStartYear, LastPublicationsEndYear, LastVolumesStartYear, LastVolumesEndYear, LastVolumesNumberFilter;
 
-                    IsMaximize = true;
-                }
-            }
-        }
+        private List<string> LastArticleSelectedAuthors,LastArticleSelectedKeywords, LastBooksSelectedAuthors = new List<string>();
+
+        private static ObjectType LastTypeSelected;
+
+        private static ObjectType LastTypeLoaded;
+
+        private static int NumberOfPages = 1;
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {
@@ -102,8 +93,10 @@ namespace View
 
         private async void searchButton_Click(object sender, RoutedEventArgs e)
         {
-            if (LastTypeSelected == "Articles")
+            if (LastTypeSelected == ObjectType.Articles)
             {
+                LastTypeLoaded = ObjectType.Articles;
+
                 List<string> selectedAuthors = AuthorsComboBox.SelectedItems.Cast<string>().ToList();
                 if (selectedAuthors.Count() == 0)
                 {
@@ -128,15 +121,22 @@ namespace View
                     abstractFilter = null;
                 }
 
-                List<ArticlesDto> articles = await _articlesRepository.GetArticlesDtoByFiltersAsync(titleFilter, abstractFilter, selectedAuthors, selectedKeywords,1);
+                LastArticleTitleFilter = titleFilter;
+                LastArticleAbstractFilter = abstractFilter;
+                LastArticleSelectedAuthors = selectedAuthors;
+                LastArticleSelectedKeywords = selectedKeywords;
+
+                List<ArticlesDto> articles = await _articlesRepository.GetArticlesDtoByFiltersAsync(titleFilter, abstractFilter, selectedAuthors, selectedKeywords,CurrentPage);
                 DataGrid.AutoGenerateColumns = true;
                 operationsColumn.Visibility = Visibility.Hidden;
                 DataGrid.ColumnWidth = DataGridLength.Auto;
                 DataGrid.ItemsSource = articles;
             }
 
-            if(LastTypeSelected == "Books")
+            if(LastTypeSelected == ObjectType.Books)
             {
+                LastTypeLoaded = ObjectType.Books;
+
                 List<string> selectedAuthors = AuthorsComboBox.SelectedItems.Cast<string>().ToList();
                 if (selectedAuthors.Count() == 0)
                 {
@@ -161,16 +161,21 @@ namespace View
                     ISBNFilter = null;
                 }
 
-                List<BooksDto> books = await _booksRepository.GetBooksDtoByFilters(ISBNFilter, titleFilter, descriptionFilter, selectedAuthors,1);
+                LastBooksISBNFilter = ISBNFilter;
+                LastBooksTitleFilter = titleFilter;
+                LastBooksDescriptionFilter = descriptionFilter;
+                LastBooksSelectedAuthors = selectedAuthors;
+
+                List<BooksDto> books = await _booksRepository.GetBooksDtoByFilters(ISBNFilter, titleFilter, descriptionFilter, selectedAuthors,CurrentPage);
                 DataGrid.AutoGenerateColumns = true;
                 operationsColumn.Visibility = Visibility.Hidden;
                 DataGrid.ColumnWidth = DataGridLength.Auto;
                 DataGrid.ItemsSource = books;
             }
 
-            if(LastTypeSelected == "Journals")
+            if(LastTypeSelected == ObjectType.Journals)
             {
-                LastTypeLoaded = "Journals";
+                LastTypeLoaded = ObjectType.Journals;
 
                 operationsColumn.Header = "Go to Volumes";
 
@@ -186,17 +191,19 @@ namespace View
                     ISSNFilter = null;
                 }
 
+                LastJournalsISSNFilter = ISSNFilter;
+                LastJournalsTitleFilter = titleFilter;
 
-                List<JournalsDto> journals = await _journalsRepository.GetJournalsDtoByFiltersAsync(titleFilter,ISSNFilter,1);
+                List<JournalsDto> journals = await _journalsRepository.GetJournalsDtoByFiltersAsync(titleFilter,ISSNFilter,CurrentPage);
                 DataGrid.AutoGenerateColumns = true;
                 operationsColumn.Visibility = Visibility.Visible;
                 DataGrid.ColumnWidth = DataGridLength.Auto;
                 DataGrid.ItemsSource = journals;
             }
 
-            if(LastTypeSelected == "Publications")
+            if(LastTypeSelected == ObjectType.Publications)
             {
-                LastTypeLoaded = "Publications";
+                LastTypeLoaded = ObjectType.Publications;
 
                 operationsColumn.Header = "Go to Journals";
 
@@ -227,16 +234,21 @@ namespace View
                     end = Int32.Parse(endYear);
                 }
 
-                List<PublicationsDto> publications = await _publicationsRepository.GetPublicationsDtoByFiltersAsync(titleFilter, start,end, 1);
+                LastPublicationsTitleFilter = titleFilter;
+                LastPublicationsStartYear = start;
+                LastPublicationsEndYear = end;
+
+
+                List<PublicationsDto> publications = await _publicationsRepository.GetPublicationsDtoByFiltersAsync(titleFilter, start,end, CurrentPage);
                 DataGrid.AutoGenerateColumns = true;
                 operationsColumn.Visibility = Visibility.Visible;
                 DataGrid.ColumnWidth = DataGridLength.Auto;
                 DataGrid.ItemsSource = publications;
             }
 
-            if(LastTypeSelected == "Volumes")
+            if(LastTypeSelected == ObjectType.Volumes)
             {
-                LastTypeLoaded = "Volumes";
+                LastTypeLoaded = ObjectType.Volumes;
 
                 operationsColumn.Header = "Go to Articles";
 
@@ -272,7 +284,11 @@ namespace View
                     end = Int32.Parse(endYear);
                 }
 
-                List<VolumesDto> volumes = await _volumesRepository.GetVolumesDtoByFiltersAsync(volNo, start, end, 1);
+                LastVolumesNumberFilter = volNo;
+                LastVolumesStartYear = start;
+                LastVolumesEndYear = end;
+
+                List<VolumesDto> volumes = await _volumesRepository.GetVolumesDtoByFiltersAsync(volNo, start, end, CurrentPage);
                 DataGrid.AutoGenerateColumns = true;
                 operationsColumn.Visibility = Visibility.Visible;
                 DataGrid.ColumnWidth = DataGridLength.Auto;
@@ -281,45 +297,130 @@ namespace View
 
         }
 
+        private async void PrevPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (CurrentPage > 1)
+            {
+                CurrentPage--;
+                if (LastTypeLoaded == ObjectType.Articles)
+                {
+                    List<ArticlesDto> articles = await _articlesRepository.GetArticlesDtoByFiltersAsync(LastArticleTitleFilter, LastArticleAbstractFilter, LastArticleSelectedAuthors, LastArticleSelectedKeywords, CurrentPage);
+                    DataGrid.ItemsSource = articles;
+                    PageNumberButton.Content = CurrentPage.ToString();
+                }
+
+                if(LastTypeLoaded == ObjectType.Books)
+                {
+                    List<BooksDto> books = await _booksRepository.GetBooksDtoByFilters(LastBooksISBNFilter, LastBooksTitleFilter, LastBooksDescriptionFilter, LastBooksSelectedAuthors, CurrentPage);
+                    DataGrid.ItemsSource = books;
+                    PageNumberButton.Content = CurrentPage.ToString();
+                }
+
+                if (LastTypeLoaded == ObjectType.Journals)
+                {
+
+                    List<JournalsDto> journals = await _journalsRepository.GetJournalsDtoByFiltersAsync(LastJournalsTitleFilter, LastJournalsISSNFilter, CurrentPage);
+                    DataGrid.ItemsSource = journals;
+                    PageNumberButton.Content = CurrentPage.ToString();
+                }
+
+                if (LastTypeLoaded == ObjectType.Publications)
+                {
+                    List<PublicationsDto> publications = await _publicationsRepository.GetPublicationsDtoByFiltersAsync(LastPublicationsTitleFilter, LastPublicationsStartYear, LastPublicationsEndYear, CurrentPage);
+                    DataGrid.ItemsSource = publications;
+                    PageNumberButton.Content = CurrentPage.ToString();
+                }
+
+                if(LastTypeLoaded == ObjectType.Volumes)
+                {
+                    List<VolumesDto> volumes = await _volumesRepository.GetVolumesDtoByFiltersAsync(LastVolumesNumberFilter, LastVolumesStartYear, LastVolumesEndYear, CurrentPage);
+                    DataGrid.ItemsSource = volumes;
+                    PageNumberButton.Content = CurrentPage.ToString();
+                }
+            }
+        }
+
+        private async void NextPageButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (true)
+            {
+                CurrentPage++;
+                if (LastTypeLoaded == ObjectType.Articles)
+                {
+                    List<ArticlesDto> articles = await _articlesRepository.GetArticlesDtoByFiltersAsync(LastArticleTitleFilter, LastArticleAbstractFilter, LastArticleSelectedAuthors, LastArticleSelectedKeywords, CurrentPage);
+                    DataGrid.ItemsSource = articles;
+                    PageNumberButton.Content = CurrentPage.ToString();
+                }
+
+                if (LastTypeLoaded == ObjectType.Books)
+                {
+                    List<BooksDto> books = await _booksRepository.GetBooksDtoByFilters(LastBooksISBNFilter, LastBooksTitleFilter, LastBooksDescriptionFilter, LastBooksSelectedAuthors, CurrentPage);
+                    DataGrid.ItemsSource = books;
+                    PageNumberButton.Content = CurrentPage.ToString();
+                }
+
+                if (LastTypeLoaded == ObjectType.Journals)
+                {
+
+                    List<JournalsDto> journals = await _journalsRepository.GetJournalsDtoByFiltersAsync(LastJournalsTitleFilter, LastJournalsISSNFilter, CurrentPage);
+                    DataGrid.ItemsSource = journals;
+                    PageNumberButton.Content = CurrentPage.ToString();
+                }
+
+                if (LastTypeLoaded == ObjectType.Publications)
+                {
+                    List<PublicationsDto> publications = await _publicationsRepository.GetPublicationsDtoByFiltersAsync(LastPublicationsTitleFilter, LastPublicationsStartYear, LastPublicationsEndYear, CurrentPage);
+                    DataGrid.ItemsSource = publications;
+                    PageNumberButton.Content = CurrentPage.ToString();
+                }
+
+                if (LastTypeLoaded == ObjectType.Volumes)
+                {
+                    List<VolumesDto> volumes = await _volumesRepository.GetVolumesDtoByFiltersAsync(LastVolumesNumberFilter, LastVolumesStartYear, LastVolumesEndYear, CurrentPage);
+                    DataGrid.ItemsSource = volumes;
+                    PageNumberButton.Content = CurrentPage.ToString();
+                }
+            }
+        }
+
         private async void navigationButton_Click(object sender, RoutedEventArgs e)
         {
 
-            if (LastTypeLoaded == "Volumes")
+            if (LastTypeLoaded == ObjectType.Volumes)
             {
-                LastTypeLoaded = "Articles";
+                LastTypeLoaded = ObjectType.Articles;
 
-                operationsColumn.Header = "Go to Articles";
                 Button button = sender as Button;
                 VolumesDto volume = button.DataContext as VolumesDto;
-                List<ArticlesDto> articles = await _articlesRepository.GetArticlesDtoByVolumeId(volume.VolumeId, 1);
+                List<ArticlesDto> articles = await _articlesRepository.GetArticlesDtoByVolumeId(volume.VolumeId, CurrentPage);
                 DataGrid.AutoGenerateColumns = true;
                 operationsColumn.Visibility = Visibility.Hidden;
                 DataGrid.ColumnWidth = DataGridLength.Auto;
                 DataGrid.ItemsSource = articles;
             }
 
-            if (LastTypeLoaded == "Journals")
+            if (LastTypeLoaded == ObjectType.Journals)
             {
-                LastTypeLoaded = "Volumes";
+                LastTypeLoaded = ObjectType.Volumes;
 
-                operationsColumn.Header = "Go to Volumes";
+                operationsColumn.Header = "Go to Articles";
                 Button button = sender as Button;
                 JournalsDto journal = button.DataContext as JournalsDto;
-                List<VolumesDto> volumes = await _volumesRepository.GetVolumesDtoByJournalId(journal.JournalId, 1);
+                List<VolumesDto> volumes = await _volumesRepository.GetVolumesDtoByJournalId(journal.JournalId, CurrentPage);
                 DataGrid.AutoGenerateColumns = true;
                 operationsColumn.Visibility = Visibility.Visible;
                 DataGrid.ColumnWidth = DataGridLength.Auto;
                 DataGrid.ItemsSource = volumes;
             }
 
-            if (LastTypeLoaded == "Publications")
+            if (LastTypeLoaded == ObjectType.Publications)
             {
-                LastTypeLoaded = "Journals";
+                LastTypeLoaded = ObjectType.Journals;
 
-                operationsColumn.Header = "Go to Journals";
+                operationsColumn.Header = "Go to Volumes";
                 Button button = sender as Button;
                 PublicationsDto publication = button.DataContext as PublicationsDto;
-                List<JournalsDto> journals = await _journalsRepository.GetJournalsDtoByPublicationIdAsync(publication.PublicationId, 1);
+                List<JournalsDto> journals = await _journalsRepository.GetJournalsDtoByPublicationIdAsync(publication.PublicationId, CurrentPage);
                 DataGrid.AutoGenerateColumns = true;
                 operationsColumn.Visibility = Visibility.Visible;
                 DataGrid.ColumnWidth = DataGridLength.Auto;
@@ -329,7 +430,7 @@ namespace View
 
         private async void ArticlesButton_Click(object sender, RoutedEventArgs e)
         {
-            LastTypeSelected = "Articles";
+            LastTypeSelected = ObjectType.Articles;
             sBar1TextBlock.Text = "Title";
             sBar2TextBlock.Text = "Description";
             sGrid2.Visibility = Visibility.Visible;
@@ -348,7 +449,7 @@ namespace View
 
         private async void BooksButton_Click(object sender, RoutedEventArgs e)
         {
-            LastTypeSelected = "Books";
+            LastTypeSelected = ObjectType.Books;
 
             sBar1TextBlock.Text = "Title";
             sBar2TextBlock.Text = "Description";
@@ -366,7 +467,7 @@ namespace View
 
         private void JournalsButton_Click(object sender, RoutedEventArgs e)
         {
-            LastTypeSelected = "Journals";
+            LastTypeSelected = ObjectType.Journals;
 
             sBar1TextBlock.Text = "Title";
             sBar2TextBlock.Text = "ISSN";
@@ -380,7 +481,7 @@ namespace View
 
         private void PublicationsButton_Click(object sender, RoutedEventArgs e)
         {
-            LastTypeSelected = "Publications";
+            LastTypeSelected = ObjectType.Publications;
 
             sBar1TextBlock.Text = "Title";
             sGrid2.Visibility = Visibility.Hidden;
@@ -393,7 +494,7 @@ namespace View
 
         private void VolumesButton_Click(object sender, RoutedEventArgs e)
         {
-            LastTypeSelected = "Volumes";
+            LastTypeSelected = ObjectType.Volumes;
 
             sBar1TextBlock.Text = "Volume number";
             sGrid2.Visibility = Visibility.Hidden;
@@ -430,68 +531,6 @@ namespace View
             }
         }
 
-
-        //private async void TypeFilter_SelectedIndexChanged(object sender, RoutedEventArgs e)
-        //{
-        //    string current_selection = TypeFilter.SelectedItem.ToString();
-
-        //    if(current_selection == "Article" )
-        //    {
-        //        FieldsFilter.ItemsSource = typeof(Article).GetProperties().Select(p => p.Name).Where(n => n != "Id" && n != "IsDeleted");
-        //        //List<ArticlesDto> articles = await _articlesRepository.GetArticlesDtoByVolumeId(672);
-        //        List<ArticlesDto> articles = await _articlesRepository.GetArticlesDtoByFiltersAsync(null, null, new List<string>() { "Aisha Levine", "Kristen Fletcher" }, null);
-        //        ListView.ItemsSource = articles;
-        //    }
-        //    if(current_selection == "Book" )
-        //    {
-        //        FieldsFilter.ItemsSource = typeof(Book).GetProperties().Select(p => p.Name).Where(n => n != "Id" && n != "IsDeleted");
-        //        List<BooksDto> books = await _booksRepository.GetBooksDtoByFilters(null, null, null, null);
-        //        ListView.ItemsSource = books;
-        //    }
-        //    if(current_selection == "Journal" )
-        //    {
-        //        FieldsFilter.ItemsSource = typeof(Journal).GetProperties().Select(p => p.Name).Where(n => n != "Id" && n != "IsDeleted");
-        //        List<JournalsDto> journals = await _journalsRepository.GetJournalsDtoByFiltersAsync("z","7");
-        //        //List<JournalsDto> journals = await _journalsRepository.GetJournalsDtoByPublicationIdAsync(34);
-        //        ListView.ItemsSource = journals;
-        //    }
-        //    if(current_selection == "Publication")
-        //    {
-        //        FieldsFilter.ItemsSource = typeof(Publication).GetProperties().Select(p => p.Name).Where(n => n != "Id" && n != "IsDeleted");
-        //        List<PublicationsDto> publications =await _publicationsRepository.GetPublicationsDtoByFiltersAsync("e", 2006, 2009);
-        //        ListView.ItemsSource = publications;
-        //    }
-        //    if(current_selection == "Volume")
-        //    {
-        //        FieldsFilter.ItemsSource = typeof(Volume).GetProperties().Select(p => p.Name).Where(n => n != "Id" && n != "IsDeleted");
-        //        // List<VolumesDto> volumes = await _volumesRepository.GetVolumesDtoByFiltersAsync(0, 2000, 2010);
-        //        List<VolumesDto> volumes = await _volumesRepository.GetVolumesDtoByJournalId(547);
-        //        ListView.ItemsSource = volumes;
-        //    }
-        //}
-
-        //private void SearchBar_GotFocus(object sender, RoutedEventArgs e)
-        //{
-        //    SearchBar.Text = string.Empty;
-        //}
-
-        //private void SearchBar_LostFocus(object sender, RoutedEventArgs e)
-        //{
-        //    SearchBar.Text = "Search here...";
-        //}
-
-
-
-
-        //private void Button_Click(object sender, RoutedEventArgs e)
-        //{
-        //    AuthorsRepository authorsRepository = new AuthorsRepository(_dbContext);
-
-        //    List<Author> names = authorsRepository.GetAuthors();
-
-
-
-        //    girdulmeu.ItemsSource = names;
-        //}
+        
     }
 }
