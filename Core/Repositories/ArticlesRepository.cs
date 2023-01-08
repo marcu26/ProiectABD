@@ -23,15 +23,86 @@ namespace Core.Repositories
             _dbContext = dbContext;
         }
 
+        public async Task<int> GetNumberOfPagesForArticlesByFilterAsync(string title, string _abstract, List<string> authors, List<string> keywords) 
+        {
+            List<Article> intermediaryList = await _dbContext.Articles
+                .Include(ar => ar.Authors)
+                .Include(ar => ar.Keywords)
+                .Where(ar => !ar.IsDeleted)
+                .ToListAsync();
+
+            List<ArticlesDto> articles = intermediaryList.Select(ar => new ArticlesDto
+            {
+                Abstract = ar.Abstract,
+                ArticleId = ar.Id,
+                ArticleTitle = ar.Title,
+                Authors = string.Join(", ", ar.Authors.Select(au => au.FullName)),
+                Keywords = string.Join(", ", ar.Keywords.Select(au => au.Word))
+
+            }).ToList();
+
+
+
+            if (title != null)
+            {
+                articles = articles.FindAll(ar => ar.ArticleTitle.Contains(title));
+            }
+
+            if (_abstract != null)
+            {
+                articles = articles.FindAll(ar => ar.Abstract.Contains(_abstract));
+            }
+
+            if (authors != null)
+            {
+                List<ArticlesDto> aux = new List<ArticlesDto>();
+                List<ArticlesDto> aux2 = new List<ArticlesDto>();
+
+                foreach (string author in authors)
+                {
+                    aux = articles.FindAll(ar => ar.Authors.Contains(author));
+
+                    foreach (ArticlesDto art in aux)
+                    {
+                        if (!aux2.Any(ax => ax == art))
+                            aux2.Add(art);
+                    }
+                }
+
+                articles = aux2;
+
+            }
+
+            if (keywords != null)
+            {
+                List<ArticlesDto> aux = new List<ArticlesDto>();
+                List<ArticlesDto> aux2 = new List<ArticlesDto>();
+
+                foreach (string keyword in keywords)
+                {
+                    aux = articles.FindAll(ar => ar.Keywords.Contains(keyword));
+
+                    foreach (ArticlesDto art in aux)
+                    {
+                        if (!aux2.Any(ax => ax == art))
+                            aux2.Add(art);
+                    }
+                }
+
+                articles = aux2;
+
+            }
+
+
+            return articles.Count()/50+1;
+        }
+
         public async Task<List<ArticlesDto>> GetArticlesDtoByFiltersAsync(string title, string _abstract, List<string> authors, List<string> keywords, int pageNumber) 
         {
             List<Article> intermediaryList = await _dbContext.Articles
                 .Include(ar => ar.Authors)
                 .Include(ar => ar.Keywords)
                 .Where(ar => !ar.IsDeleted)
-                .OrderBy(ar=>ar.Title)
-                .Skip((pageNumber-1)*50)
-                .Take(50)
                 .ToListAsync();
 
             List<ArticlesDto> articles = intermediaryList.Select(ar => new ArticlesDto
@@ -97,7 +168,11 @@ namespace Core.Repositories
             }
 
 
-            return articles;
+            return articles
+                .OrderBy(ar => ar.ArticleTitle)
+                .Skip((pageNumber - 1) * 50)
+                .Take(50)
+                .ToList();
         }
 
         public async Task<List<ArticlesDto>> GetArticlesDtoByVolumeId(int volumeId, int pageNumber) 
@@ -122,6 +197,16 @@ namespace Core.Repositories
 
 
             }).ToList();
+        }
+
+
+        public async Task<int> GetNumberOfPagesForArticlesByFilterAsync(int volumeId)
+        {
+            return await _dbContext.Articles
+                .Include(ar => ar.Authors)
+                .Include(ar => ar.Keywords)
+                .Where(ar => ar.VolumeId == volumeId && !ar.IsDeleted)
+                .CountAsync()/50+1;
         }
     }
 }

@@ -32,9 +32,6 @@ namespace Core.Repositories
                     NumberOfArticles = v.Articles.Count,
                     PublishedDate = v.PublishedDate
                 })
-                .OrderBy(v => v.VolumeId)
-                .Skip((pageNumber - 1) * 50)
-                .Take(50)
                 .ToListAsync();
 
             if (number > 0)
@@ -45,7 +42,36 @@ namespace Core.Repositories
                 if (startYear <= endYear)
                     list = list.FindAll(v => v.PublishedDate.Year >= startYear && v.PublishedDate.Year <= endYear);
             }
-            return list;
+            return list
+                .OrderBy(v => v.VolumeNumber)
+                .Skip((pageNumber - 1) * 50)
+                .Take(50)
+                .ToList();
+        }
+
+        public async Task<int> GetVolumesNumberOfPagesByFiltersAsync(int number, int startYear, int endYear)
+        {
+            var list = await _dbContext.Volumes
+                .Include(v => v.Articles)
+                .Where(v => !v.IsDeleted)
+                .Select(v => new VolumesDto
+                {
+                    VolumeId = v.Id,
+                    VolumeNumber = v.Number,
+                    NumberOfArticles = v.Articles.Count,
+                    PublishedDate = v.PublishedDate
+                })
+                .ToListAsync();
+
+            if (number > 0)
+                list = list.FindAll(v => v.VolumeNumber == number);
+
+            if (startYear != 0 && endYear != 0)
+            {
+                if (startYear <= endYear)
+                    list = list.FindAll(v => v.PublishedDate.Year >= startYear && v.PublishedDate.Year <= endYear);
+            }
+            return list.Count()/50+1;
         }
 
         public async Task<List<VolumesDto>> GetVolumesDtoByJournalId(int journalId, int pageNumber) 
@@ -64,6 +90,15 @@ namespace Core.Repositories
                .Skip((pageNumber - 1) * 50)
                .Take(50)
                .ToListAsync();
+        }
+
+
+        public async Task<int> GetVolumesNumberOfPagesByJournalId(int journalId)
+        {
+            return await _dbContext.Volumes
+               .Include(v => v.Articles)
+               .Where(v => !v.IsDeleted && v.JournalId == journalId)
+               .CountAsync() / 50+1;
         }
 
 

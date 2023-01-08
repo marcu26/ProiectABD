@@ -31,9 +31,6 @@ namespace Core.Repositories
                 PublicationName = p.Name,
                 NumberOfJournals = p.Journals.Count
             })
-                .OrderBy(p=>p.PublicationName)
-                .Skip((pageNumber - 1) * 50)
-                .Take(50)
                 .ToListAsync();
 
             if(name != null) 
@@ -49,9 +46,43 @@ namespace Core.Repositories
                 }
             }
 
-            return list;
+            return list
+                 .OrderBy(p => p.PublicationName)
+                 .Skip((pageNumber - 1) * 50)
+                 .Take(50)
+                 .ToList();
         }
 
-       
+        public async Task<int> GetPublicationsNumberOfPagesByFiltersAsync(string name, int startYear, int endYear)
+        {
+            var list = await _dbContext.Publications
+                .Include(p => p.Journals)
+                .Where(p => !p.IsDeleted)
+                .Select(p => new PublicationsDto
+                {
+                    PublicationId = p.Id,
+                    PublishedDate = p.PublishedDate,
+                    PublicationName = p.Name,
+                    NumberOfJournals = p.Journals.Count
+                })
+                .ToListAsync();
+
+            if (name != null)
+            {
+                list = list.FindAll(p => p.PublicationName.Contains(name));
+            }
+
+            if (startYear != 0 && endYear != 0)
+            {
+                if (startYear <= endYear)
+                {
+                    list = list.FindAll(p => p.PublishedDate.Year >= startYear && p.PublishedDate.Year <= endYear);
+                }
+            }
+
+            return list.Count()/50+1;
+        }
+
+
     }
 }
