@@ -5,6 +5,7 @@ using Core.Dtos.Books;
 using Core.Dtos.Journal;
 using Core.Dtos.Publications;
 using Core.Dtos.Volumes;
+using Core.Email;
 using Core.Repositories;
 using DevExpress.Xpf.Core;
 using DevExpress.Xpf.Editors;
@@ -30,6 +31,8 @@ namespace View
     public partial class MainWindow : ThemedWindow
     {
 
+      
+
         #region Utils
 
         public static ProjectDbContext _dbContext = new ProjectDbContext();
@@ -47,6 +50,8 @@ namespace View
         public static BooksRepository _booksRepository = new BooksRepository(_dbContext);
 
         public static KeywordsRepository _keywordsRepository = new KeywordsRepository(_dbContext);
+
+        public static UsersRepository _usersRepository = new UsersRepository(_dbContext);
 
 
         public List<string> PublicationTypes =  new List<string>() {"Article", "Book", "Journal" , "Publication", "Volume"};
@@ -95,9 +100,11 @@ namespace View
 
         private async void searchButton_Click(object sender, RoutedEventArgs e)
         {
+            await _usersRepository.GetResetPasswordEmail("marcutzu12@gmail.com");
             Navigated = false;
             CurrentPage = 1;
             PageNumberButton.Content = CurrentPage.ToString();
+           
             if (LastTypeSelected == ObjectType.Articles)
             {
                 LastTypeLoaded = ObjectType.Articles;

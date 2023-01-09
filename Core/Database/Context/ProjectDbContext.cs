@@ -16,6 +16,8 @@ namespace Core.Database.Context
         public DbSet<Publication> Publications { get; set; }
         public DbSet<Volume> Volumes { get; set; }
 
+        public DbSet<User> Users { get; set; }
+
         protected override void OnModelCreating(DbModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Book>().Property(b => b.ISBN).HasMaxLength(13);
@@ -31,6 +33,7 @@ namespace Core.Database.Context
             modelBuilder.Entity<Journal>().Property(j => j.Name).IsRequired();
             modelBuilder.Entity<Keyword>().Property(k => k.Word).IsRequired();
             modelBuilder.Entity<Publication>().Property(p => p.Name).IsRequired();
+            modelBuilder.Entity<User>().Property(u => u.ResetPasswordCode).IsOptional();
 
         }
     }
