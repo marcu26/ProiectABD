@@ -200,7 +200,7 @@ namespace Core.Repositories
         }
 
 
-        public async Task<int> GetNumberOfPagesForArticlesByFilterAsync(int volumeId)
+        public async Task<int> GetNumberOfPagesForArticlesByVolumeIdAsync(int volumeId)
         {
             return await _dbContext.Articles
                 .Include(ar => ar.Authors)
