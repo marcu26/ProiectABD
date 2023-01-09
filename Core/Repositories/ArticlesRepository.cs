@@ -1,6 +1,7 @@
 ﻿using Core.Database.Context;
 using Core.Database.Entities;
 using Core.Dtos.Articles;
+using Core.Email;
 using Infrastructure.Base;
 using System;
 using System.Collections.Generic;

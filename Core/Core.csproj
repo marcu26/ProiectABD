@@ -36,13 +36,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BouncyCastle.Crypto, Version=1.9.0.0, Culture=neutral, PublicKeyToken=0e99375e54769942, processorArchitecture=MSIL">
+      <HintPath>..\packages\Portable.BouncyCastle.1.9.0\lib\net40\BouncyCastle.Crypto.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
+    <Reference Include="MailKit, Version=3.4.0.0, Culture=neutral, PublicKeyToken=4e064fe7c44a8f1b, processorArchitecture=MSIL">
+      <HintPath>..\packages\MailKit.3.4.3\lib\net47\MailKit.dll</HintPath>
+    </Reference>
+    <Reference Include="MimeKit, Version=3.4.0.0, Culture=neutral, PublicKeyToken=bede1c8a46c66814, processorArchitecture=MSIL">
+      <HintPath>..\packages\MimeKit.3.4.3\lib\net47\MimeKit.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Buffers, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Buffers.4.5.1\lib\net461\System.Buffers.dll</HintPath>
+    </Reference>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Configuration.ConfigurationManager, Version=7.0.0.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -50,7 +62,17 @@
     </Reference>
     <Reference Include="System.Core" />
     <Reference Include="System.Data.OracleClient" />
+    <Reference Include="System.Memory, Version=4.0.1.2, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Memory.4.5.5\lib\net461\System.Memory.dll</HintPath>
+    </Reference>
     <Reference Include="System.Net" />
+    <Reference Include="System.Numerics" />
+    <Reference Include="System.Numerics.Vectors, Version=4.1.4.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Numerics.Vectors.4.5.0\lib\net46\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Runtime.CompilerServices.Unsafe.6.0.0\lib\net461\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
     <Reference Include="System.Security" />
     <Reference Include="System.Security.AccessControl, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Security.AccessControl.6.0.0\lib\net461\System.Security.AccessControl.dll</HintPath>
@@ -62,6 +84,9 @@
       <HintPath>..\packages\System.Security.Principal.Windows.5.0.0\lib\net461\System.Security.Principal.Windows.dll</HintPath>
     </Reference>
     <Reference Include="System.ServiceProcess" />
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.0.1, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.Threading.Tasks.Extensions.4.5.4\lib\net461\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
     <Reference Include="System.Transactions" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -79,13 +104,17 @@
     <Compile Include="Database\Entities\Journal.cs" />
     <Compile Include="Database\Entities\Keyword.cs" />
     <Compile Include="Database\Entities\Publication.cs" />
+    <Compile Include="Database\Entities\User.cs" />
     <Compile Include="Database\Entities\Volume.cs" />
     <Compile Include="Dtos\Articles\ArticlesDto.cs" />
     <Compile Include="Dtos\Books\BooksDto.cs" />
     <Compile Include="Dtos\Journals\JournalRowDto.cs" />
     <Compile Include="Dtos\Journals\JournalsDto.cs" />
     <Compile Include="Dtos\Publications\PublicationsDto.cs" />
+    <Compile Include="Dtos\Users\UserDto.cs" />
     <Compile Include="Dtos\Volumes\VolumesDto.cs" />
+    <Compile Include="Email\EmailDto.cs" />
+    <Compile Include="Email\EmailService.cs" />
     <Compile Include="MainClass.cs" />
     <Compile Include="Migrations\202212151134127_First.cs" />
     <Compile Include="Migrations\202212151134127_First.designer.cs">
@@ -99,6 +128,18 @@
     <Compile Include="Migrations\202212271421533_AddedMaxLenghts.designer.cs">
       <DependentUpon>202212271421533_AddedMaxLenghts.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202301091126158_Created users.cs" />
+    <Compile Include="Migrations\202301091126158_Created users.designer.cs">
+      <DependentUpon>202301091126158_Created users.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202301091128223_Modified users.cs" />
+    <Compile Include="Migrations\202301091128223_Modified users.designer.cs">
+      <DependentUpon>202301091128223_Modified users.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Migrations\202301091801467_Added reset from mail.cs" />
+    <Compile Include="Migrations\202301091801467_Added reset from mail.designer.cs">
+      <DependentUpon>202301091801467_Added reset from mail.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ArticlesRepository.cs" />
@@ -107,6 +148,7 @@
     <Compile Include="Repositories\JournalsRepository.cs" />
     <Compile Include="Repositories\KeywordsRepository.cs" />
     <Compile Include="Repositories\PublicationsRepository.cs" />
+    <Compile Include="Repositories\UsersRepository.cs" />
     <Compile Include="Repositories\VolumesRepository.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -128,6 +170,15 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Migrations\202212271421533_AddedMaxLenghts.resx">
       <DependentUpon>202212271421533_AddedMaxLenghts.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301091126158_Created users.resx">
+      <DependentUpon>202301091126158_Created users.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301091128223_Modified users.resx">
+      <DependentUpon>202301091128223_Modified users.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301091801467_Added reset from mail.resx">
+      <DependentUpon>202301091801467_Added reset from mail.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
