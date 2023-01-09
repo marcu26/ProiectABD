@@ -454,6 +454,8 @@ namespace View
             {
                 LastTypeLoaded = ObjectType.Articles;
 
+                ArticlesButton_Click(sender, e);
+
                 Button button = sender as Button;
                 VolumesDto volume = button.DataContext as VolumesDto;
 
@@ -471,6 +473,8 @@ namespace View
             if (LastTypeLoaded == ObjectType.Journals)
             {
                 LastTypeLoaded = ObjectType.Volumes;
+
+                VolumesButton_Click(sender, e);
 
                 operationsColumn.Header = "Go to Articles";
                 Button button = sender as Button;

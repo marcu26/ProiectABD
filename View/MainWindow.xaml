@@ -180,17 +180,13 @@
                 <!--<Button Style="{StaticResource addButton}">
                     <StackPanel Orientation="Horizontal">
                         <Icon:PackIconMaterial Kind="Plus" VerticalAlignment="Center" Margin="0 1 8 0" Width="11" Height="11"/>
-                        <TextBlock Text="Add New Member"/>
+                        <TextBlock Text="Add New"/>
                     </StackPanel>
                 </Button>-->
 
                 <!--Seprator-->
                 <Separator Height="1" Grid.Row="3" Background="#DAE2EA" Margin="0 -1 0 10"/>
 
-                <!--Tab buttons-->
-                <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0 10 0 0">
-         
-                </StackPanel>
 
                 <!--Counter Title-->
                 <TextBlock Text="Search results" Grid.Row="4" FontSize="18" FontWeight="SemiBold" Foreground="#121518" HorizontalAlignment="Left" VerticalAlignment="Center"/>

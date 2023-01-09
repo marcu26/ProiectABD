@@ -1,0 +1,75 @@
+﻿<dx:ThemedWindow
+    x:Class="View.LogInWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:dx="http://schemas.devexpress.com/winfx/2008/xaml/core"
+    xmlns:av="http://schemas.microsoft.com/expression/blend/2008" 
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+    mc:Ignorable="av" 
+    xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
+    Title="Science Time" Height="500" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" ShowBackButton="False" ShowStatusPanel="True" TitleAlignment="Center"
+    Background="Transparent"
+    Icon="Backgrounds\clock_icon.png">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+    </Window.Resources>
+
+    <Border CornerRadius="10" Background="#EFF2F7">
+        <Grid Grid.Column="1" Margin="40 20 40 20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+
+            <Grid x:Name="EmailGrid" Width="420" HorizontalAlignment="Left" Margin="0 0">
+                <TextBlock x:Name="TextBlockEmail" Margin="20 0" VerticalAlignment="Center" Foreground="#B0B9C6" IsHitTestVisible="False"
+                           Panel.ZIndex="1" Text="Email"
+                           Visibility="{Binding ElementName=UsernameTextBox, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
+
+                <TextBox Name="EmailTextBox" Style="{StaticResource searchTextbox}" Margin="0 0 15 0"/>
+            </Grid>
+
+
+            <Grid x:Name="PasswordGrid" Width="420" VerticalAlignment="Top" Grid.Row="2">
+                <TextBlock x:Name="TextBlockPassword" Margin="20 30 0 0" VerticalAlignment="Center" Foreground="#B0B9C6" IsHitTestVisible="False"
+                           Panel.ZIndex="1" Text="Password"
+                           Visibility="{Binding ElementName=PasswordTextBox, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
+
+                <TextBox Name="PasswordTextBox" Style="{StaticResource searchTextbox}" Margin="0 30 15 0"/>
+            </Grid>
+
+            <Grid x:Name="ConfirmPasswordGrid" Width="420" VerticalAlignment="Top" Grid.Row="3" Margin="0,10,0,0">
+                <TextBlock x:Name="TextBlockConfirmPassword" Margin="20 20 0 0" VerticalAlignment="Center" Foreground="#B0B9C6" IsHitTestVisible="False"
+                           Panel.ZIndex="1" Text="Confirm Password"
+                           Visibility="{Binding ElementName=PasswordTextBox, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
+
+                <TextBox Name="ConfirmPasswordTextBox" Style="{StaticResource searchTextbox}" Margin="0 20 15 0"/>
+            </Grid>
+
+            <Grid x:Name="LoginButtonsGrid" Grid.Row="4" Margin="0,60,0,0" HorizontalAlignment="Left" Width="420">
+                <Button x:Name="LogInButton" Style="{StaticResource addButton}" HorizontalAlignment="Left" Margin="30,20,0,20" Click="LogInButton_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Icon:PackIconMaterial Kind="LoginVariant" VerticalAlignment="Center" Margin="0 1 8 0" Width="11" Height="11"/>
+                        <TextBlock Text="Log In"/>
+                    </StackPanel>
+                </Button>
+
+                <Button x:Name="RegisterButton" Style="{StaticResource addButton}" HorizontalAlignment="Left" Margin="240,20,0,20">
+                    <StackPanel Orientation="Horizontal">
+                        <Icon:PackIconMaterial Kind="PenPlus" VerticalAlignment="Center" Margin="0 1 8 0" Width="11" Height="11"/>
+                        <TextBlock Text="Register"/>
+                    </StackPanel>
+                </Button>
+            </Grid>
+
+
+
+
+        </Grid>
+    </Border>
+
+</dx:ThemedWindow>
