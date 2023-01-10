@@ -53,6 +53,7 @@ namespace View
                     PasswordGrid.Visibility = Visibility.Visible;
                     ConfirmPasswordGrid.Visibility = Visibility.Visible;
                     LogInButton.Content = "Reset password";
+                    LogInButtonIcon.Kind = MahApps.Metro.IconPacks.PackIconMaterialKind.FormTextboxPassword;
                     isResettingPasswordStep2 = true;
                     isResettingPasswordStep1 = false;
                     EmailTextBox.Text = string.Empty;
@@ -139,7 +140,7 @@ namespace View
 
                 try
                 {
-                    await _usersRepository.CreateUserAsync(email, fullname, password, 1);
+                    loggedUser = await _usersRepository.CreateUserAsync(email, fullname, password, 1);
                 }catch(Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Warning!", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -160,9 +161,13 @@ namespace View
             PasswordTextBox.Password = String.Empty;
             ConfirmPasswordTextBox.Password = String.Empty;
 
+            PasswordTextBox_LostFocus(sender, e);
+            ConfirmPasswordTextBox_LostFocus(sender, e);
+
             GuestLogInButton.Visibility = Visibility.Hidden;
             ForgotPasswordButton.Visibility = Visibility.Hidden;
 
+            LogInButtonIcon.Kind = MahApps.Metro.IconPacks.PackIconMaterialKind.AccountArrowUpOutline;
             LogInButton.Content = "Sign Up";
             LogLabel.Content = "Register";
             PasswordGrid.Visibility = Visibility.Visible;
@@ -179,11 +184,16 @@ namespace View
             PasswordTextBox.Password = String.Empty;
             ConfirmPasswordTextBox.Password = String.Empty;
 
+            PasswordTextBox_LostFocus(sender, e);
+            ConfirmPasswordTextBox_LostFocus(sender, e);
+
             isResettingPasswordStep1 = false;
             isResettingPasswordStep2 = false;
             GuestLogInButton.Visibility = Visibility.Visible;
             ForgotPasswordButton.Visibility = Visibility.Visible;
 
+            LogInButtonIcon.Kind = MahApps.Metro.IconPacks.PackIconMaterialKind.LoginVariant;
+            LogInButtonIcon.Visibility= Visibility.Visible;
             LogInButton.Content = "Log In";
             LogLabel.Content = "Log In";
             PasswordGrid.Visibility = Visibility.Visible;
@@ -202,6 +212,7 @@ namespace View
             PasswordGrid.Visibility = Visibility.Hidden;
             LogLabel.Content = "Email for reseting your password";
             LogInButton.Content = "Send email";
+            LogInButtonIcon.Kind = MahApps.Metro.IconPacks.PackIconMaterialKind.EmailFast;
         }
 
         private async void GuestLogInButton_Click(object sender, RoutedEventArgs e)

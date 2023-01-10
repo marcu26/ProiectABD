@@ -65,7 +65,7 @@
             <Grid x:Name="ButtonsGrid" Grid.Row="5" Margin="0,60,0,0" HorizontalAlignment="Center" Width="480">
                 <Button x:Name="LogInButton" Style="{StaticResource addButton}" HorizontalAlignment="Left" Margin="30,0,0,20" Click="LogInButton_Click">
                     <StackPanel Orientation="Horizontal">
-                        <Icon:PackIconMaterial Kind="LoginVariant" VerticalAlignment="Center" Margin="0 1 8 0" Width="11" Height="11"/>
+                        <Icon:PackIconMaterial x:Name="LogInButtonIcon" Kind="LoginVariant" VerticalAlignment="Center" Margin="0 1 8 0" Width="11" Height="11"/>
                         <TextBlock Text="Log In"/>
                     </StackPanel>
                 </Button>

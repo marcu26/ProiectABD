@@ -44,7 +44,7 @@ namespace Core.Repositories
 
         #endregion
 
-        public async Task CreateUserAsync(string email, string fullName, string password, int role)
+        public async Task<UserDto> CreateUserAsync(string email, string fullName, string password, int role)
         {
             if (_dbContext.Users.Any(u => u.Email == email))
             {
@@ -64,6 +64,13 @@ namespace Core.Repositories
             _dbContext.Users.Add(user);
 
             await _dbContext.SaveChangesAsync();
+
+            return new UserDto
+            {
+                Email = email,
+                FullName = fullName,
+                Role = role
+            };
         }
 
         public async Task<UserDto> LoginByEmailAndPassword(string email, string password)
@@ -79,7 +86,6 @@ namespace Core.Repositories
             return new UserDto
             {
                 Email = user.Email,
-                Id = user.Id,
                 FullName = user.FullName,
                 Role = user.Role
             };
