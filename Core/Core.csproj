@@ -140,6 +140,10 @@
     <Compile Include="Migrations\202301091801467_Added reset from mail.designer.cs">
       <DependentUpon>202301091801467_Added reset from mail.cs</DependentUpon>
     </Compile>
+    <Compile Include="Migrations\202301100747558_PrivateAndPublic BooksAndArticles.cs" />
+    <Compile Include="Migrations\202301100747558_PrivateAndPublic BooksAndArticles.designer.cs">
+      <DependentUpon>202301100747558_PrivateAndPublic BooksAndArticles.cs</DependentUpon>
+    </Compile>
     <Compile Include="Migrations\Configuration.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repositories\ArticlesRepository.cs" />
@@ -180,7 +184,11 @@
     <EmbeddedResource Include="Migrations\202301091801467_Added reset from mail.resx">
       <DependentUpon>202301091801467_Added reset from mail.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Migrations\202301100747558_PrivateAndPublic BooksAndArticles.resx">
+      <DependentUpon>202301100747558_PrivateAndPublic BooksAndArticles.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

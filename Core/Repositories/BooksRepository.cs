@@ -5,6 +5,7 @@ using Core.Dtos.Books;
 using Infrastructure.Base;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
@@ -21,11 +22,16 @@ namespace Core.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<List<BooksDto>> GetBooksDtoByFilters(string _ISBN, string title, string description, List<string> authors, int pageNumber) 
+        public async Task<List<BooksDto>> GetBooksDtoByFilters(string _ISBN, string title, string description, List<string> authors, int pageNumber, int role) 
         {
             List<Book> intermediaryList = await _dbContext.Books
                 .Include(b => b.Authors)
                 .ToListAsync();
+
+            if (role == 2)
+            {
+                intermediaryList = intermediaryList.Where(ar => ar.IsPublic == true).ToList();
+            }
 
             List<BooksDto> books = intermediaryList.Select(b => new BooksDto
             {
@@ -84,11 +90,16 @@ namespace Core.Repositories
         }
 
 
-        public async Task<int> GetNumberOfBookPagesByFilter(string _ISBN, string title, string description, List<string> authors)
+        public async Task<int> GetNumberOfBookPagesByFilter(string _ISBN, string title, string description, List<string> authors, int role)
         {
             List<Book> intermediaryList = await _dbContext.Books
                 .Include(b => b.Authors)
                 .ToListAsync();
+
+            if (role == 2)
+            {
+                intermediaryList = intermediaryList.Where(ar => ar.IsPublic == true).ToList();
+            }
 
             List<BooksDto> books = intermediaryList.Select(b => new BooksDto
             {
