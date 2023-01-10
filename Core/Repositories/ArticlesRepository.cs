@@ -5,6 +5,7 @@ using Core.Email;
 using Infrastructure.Base;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
@@ -24,13 +25,18 @@ namespace Core.Repositories
             _dbContext = dbContext;
         }
 
-        public async Task<int> GetNumberOfPagesForArticlesByFilterAsync(string title, string _abstract, List<string> authors, List<string> keywords) 
+        public async Task<int> GetNumberOfPagesForArticlesByFilterAsync(string title, string _abstract, List<string> authors, List<string> keywords, int role) 
         {
             List<Article> intermediaryList = await _dbContext.Articles
                 .Include(ar => ar.Authors)
                 .Include(ar => ar.Keywords)
                 .Where(ar => !ar.IsDeleted)
                 .ToListAsync();
+
+            if(role == 2) 
+            {
+                intermediaryList = intermediaryList.Where(ar => ar.IsPublic==true).ToList();
+            }
 
             List<ArticlesDto> articles = intermediaryList.Select(ar => new ArticlesDto
             {
@@ -98,13 +104,18 @@ namespace Core.Repositories
             return articles.Count()/50+1;
         }
 
-        public async Task<List<ArticlesDto>> GetArticlesDtoByFiltersAsync(string title, string _abstract, List<string> authors, List<string> keywords, int pageNumber) 
+        public async Task<List<ArticlesDto>> GetArticlesDtoByFiltersAsync(string title, string _abstract, List<string> authors, List<string> keywords, int pageNumber, int role) 
         {
             List<Article> intermediaryList = await _dbContext.Articles
                 .Include(ar => ar.Authors)
                 .Include(ar => ar.Keywords)
                 .Where(ar => !ar.IsDeleted)
                 .ToListAsync();
+
+            if (role == 2)
+            {
+                intermediaryList = intermediaryList.Where(ar => ar.IsPublic == true).ToList();
+            }
 
             List<ArticlesDto> articles = intermediaryList.Select(ar => new ArticlesDto
             {
@@ -176,16 +187,24 @@ namespace Core.Repositories
                 .ToList();
         }
 
-        public async Task<List<ArticlesDto>> GetArticlesDtoByVolumeId(int volumeId, int pageNumber) 
+        public async Task<List<ArticlesDto>> GetArticlesDtoByVolumeId(int volumeId, int pageNumber, int role) 
         {
             List<Article> articles = await _dbContext.Articles
                 .Include(ar => ar.Authors)
                 .Include(ar=>ar.Keywords)
                 .Where(ar => ar.VolumeId == volumeId && !ar.IsDeleted)
-                .OrderBy(ar=>ar.Title)
+                .ToListAsync();
+
+            if (role == 2)
+            {
+                articles = articles.Where(ar => ar.IsPublic == true).ToList();
+            }
+
+            articles = articles
+                .OrderBy(ar => ar.Title)
                 .Skip((pageNumber - 1) * 50)
                 .Take(50)
-                .ToListAsync();
+                .ToList();
 
 
             return articles.Select(ar => new ArticlesDto
@@ -201,13 +220,22 @@ namespace Core.Repositories
         }
 
 
-        public async Task<int> GetNumberOfPagesForArticlesByVolumeIdAsync(int volumeId)
+        public async Task<int> GetNumberOfPagesForArticlesByVolumeIdAsync(int volumeId, int role)
         {
-            return await _dbContext.Articles
+            List <Article> articles= await _dbContext.Articles
                 .Include(ar => ar.Authors)
                 .Include(ar => ar.Keywords)
                 .Where(ar => ar.VolumeId == volumeId && !ar.IsDeleted)
-                .CountAsync()/50+1;
+                .ToListAsync();
+
+            if(role == 2) 
+            {
+                articles = articles.Where(ar => ar.IsPublic == true).ToList();
+            }
+
+            return articles.Count() / 50 + 1;
+
+
         }
     }
 }
