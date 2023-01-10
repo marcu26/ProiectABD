@@ -4,6 +4,7 @@ using Core.Dtos.Articles;
 using Core.Dtos.Books;
 using Core.Dtos.Journal;
 using Core.Dtos.Publications;
+using Core.Dtos.Users;
 using Core.Dtos.Volumes;
 using Core.Email;
 using Core.Repositories;
@@ -52,13 +53,29 @@ namespace View
         public static KeywordsRepository _keywordsRepository = new KeywordsRepository(_dbContext);
 
         public static UsersRepository _usersRepository = new UsersRepository(_dbContext);
+        private enum ObjectType { Articles, Books, Journals, Volumes, Publications };
 
+        private static int CurrentPage = 1;
 
-        public List<string> PublicationTypes =  new List<string>() {"Article", "Book", "Journal" , "Publication", "Volume"};
+        private string LastArticleTitleFilter, LastArticleAbstractFilter, LastBooksISBNFilter, LastBooksTitleFilter, LastBooksDescriptionFilter, LastJournalsTitleFilter, LastJournalsISSNFilter, LastPublicationsTitleFilter;
+
+        private int LastPublicationsStartYear, LastPublicationsEndYear, LastVolumesStartYear, LastVolumesEndYear, LastVolumesNumberFilter;
+
+        private List<string> LastArticleSelectedAuthors, LastArticleSelectedKeywords, LastBooksSelectedAuthors = new List<string>();
+
+        public int LastVolumeId, LastJournalId, LastPublicationId;
+
+        private static ObjectType LastTypeSelected;
+
+        private static ObjectType LastTypeLoaded;
+
+        private static int NumberOfPages = 1;
+
+        private static bool Navigated = false;
 
         #endregion
 
-        public MainWindow()
+        public MainWindow(UserDto loggedUser)
         {
             InitializeComponent();
             sBar1TextBlock.Text = "Search here...";
@@ -70,25 +87,7 @@ namespace View
             KeywordsComboBox.Visibility = Visibility.Hidden;
         }
 
-        private enum ObjectType {Articles, Books, Journals, Volumes, Publications};
-
-        private static int CurrentPage = 1;
-
-        private string LastArticleTitleFilter, LastArticleAbstractFilter, LastBooksISBNFilter, LastBooksTitleFilter, LastBooksDescriptionFilter, LastJournalsTitleFilter, LastJournalsISSNFilter, LastPublicationsTitleFilter;
-
-        private int LastPublicationsStartYear, LastPublicationsEndYear, LastVolumesStartYear, LastVolumesEndYear, LastVolumesNumberFilter;
-
-        private List<string> LastArticleSelectedAuthors,LastArticleSelectedKeywords, LastBooksSelectedAuthors = new List<string>();
-
-        public int LastVolumeId, LastJournalId, LastPublicationId;
-
-        private static ObjectType LastTypeSelected;
-
-        private static ObjectType LastTypeLoaded;
-
-        private static int NumberOfPages = 1;
-
-        private static bool Navigated = false;
+        
 
         private void Border_MouseDown(object sender, MouseButtonEventArgs e)
         {

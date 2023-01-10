@@ -116,7 +116,7 @@ namespace Core.Repositories
 
 
             if (user == null)
-                throw new Exception("The code is not available");
+                throw new Exception("The code is not right");
 
             user.Password = Encode(newPassword);
             user.ResetPasswordCode = null;

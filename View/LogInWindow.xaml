@@ -50,18 +50,16 @@
 
             <Grid x:Name="PasswordGrid" Width="420" VerticalAlignment="Top" HorizontalAlignment="Center" Grid.Row="4">
                 <TextBlock x:Name="TextBlockPassword" Margin="20,30,0,0" VerticalAlignment="Top" Foreground="#B0B9C6" IsHitTestVisible="False"
-                           Panel.ZIndex="1" Text="Password"
-                           Visibility="{Binding ElementName=PasswordTextBox, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
+                           Panel.ZIndex="1" Text="Password"/>
 
-                <TextBox Name="PasswordTextBox" Style="{StaticResource searchTextbox}" Margin="0 20 15 0"/>
+                <PasswordBox Name="PasswordTextBox" Style="{StaticResource passwordbox}" Margin="0 20 15 0" GotFocus="PasswordTextBox_GotFocus" LostFocus="PasswordTextBox_LostFocus"/>
             </Grid>
 
             <Grid x:Name="ConfirmPasswordGrid" Width="420" VerticalAlignment="Top" Grid.Row="5" Margin="0,10,0,0" Visibility="Hidden">
                 <TextBlock x:Name="TextBlockConfirmPassword" Margin="20 10 0 0" VerticalAlignment="Center" Foreground="#B0B9C6" IsHitTestVisible="False"
-                           Panel.ZIndex="1" Text="Confirm Password"
-                           Visibility="{Binding ElementName=ConfirmPasswordTextBox, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
+                           Panel.ZIndex="1" Text="Confirm Password" />
 
-                <TextBox Name="ConfirmPasswordTextBox" Style="{StaticResource searchTextbox}" Margin="0 10 15 0"/>
+                <PasswordBox Name="ConfirmPasswordTextBox" Style="{StaticResource passwordbox}" Margin="0 10 15 0" GotFocus="ConfirmPasswordTextBox_GotFocus" LostFocus="ConfirmPasswordTextBox_LostFocus"/>
             </Grid>
 
             <Grid x:Name="ButtonsGrid" Grid.Row="5" Margin="0,60,0,0" HorizontalAlignment="Center" Width="480">
@@ -85,6 +83,22 @@
                         <TextBlock Text="Cancel"/>
                     </StackPanel>
                 </Button>
+
+                <Button x:Name="ForgotPasswordButton" Style="{StaticResource addButton}" HorizontalAlignment="Left" Margin="30,150,0,20" Click="ForgotPasswordButton_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Icon:PackIconMaterial Kind="AccountReactivate" VerticalAlignment="Center" Margin="0 1 8 0" Width="12" Height="12"/>
+                        <TextBlock Text="ForgotPassword"/>
+                    </StackPanel>
+                </Button>
+
+                <Button x:Name="GuestLogInButton" Style="{StaticResource addButton}" HorizontalAlignment="Left" Margin="300,150,0,20" Click="GuestLogInButton_Click">
+                    <StackPanel Orientation="Horizontal">
+                        <Icon:PackIconMaterial Kind="AccountBox" VerticalAlignment="Center" Margin="0 1 8 0" Width="11" Height="11"/>
+                        <TextBlock Text="Guest Log In"/>
+                    </StackPanel>
+                </Button>
+
+
             </Grid>
 
 
