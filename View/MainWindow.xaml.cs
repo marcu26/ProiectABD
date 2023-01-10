@@ -517,69 +517,88 @@ namespace View
 
         private async void navigationButton_Click(object sender, RoutedEventArgs e)
         {
-            Navigated = true;
+           
+                Navigated = true;
 
-            if (LastTypeLoaded == ObjectType.Volumes)
-            {
-                LastTypeLoaded = ObjectType.Articles;
+                if (LastTypeLoaded == ObjectType.Volumes)
+                {
+                    Button button = sender as Button;
+                    VolumesDto volume = button.DataContext as VolumesDto;
 
-                ArticlesButton_Click(sender, e);
+                    LastVolumeId = volume.VolumeId;
+                try
+                {
+                    NumberOfPages = await _articlesRepository.GetNumberOfPagesForArticlesByVolumeIdAsync(volume.VolumeId, loggedUser.Role);
+                    CurrentPage = 1;
+                    PageNumberButton.Content = CurrentPage.ToString();
+                    List<ArticlesDto> articles = await _articlesRepository.GetArticlesDtoByVolumeId(volume.VolumeId, CurrentPage, loggedUser.Role);
+                    DataGrid.AutoGenerateColumns = true;
+                    operationsColumn.Visibility = Visibility.Hidden;
+                    DataGrid.ColumnWidth = DataGridLength.Auto;
+                    DataGrid.ItemsSource = articles;
+                }
+                catch(Exception ex) 
+                { 
+                    return; 
+                }
 
-                Button button = sender as Button;
-                VolumesDto volume = button.DataContext as VolumesDto;
-
-                LastVolumeId = volume.VolumeId;
-                NumberOfPages = await _articlesRepository.GetNumberOfPagesForArticlesByVolumeIdAsync(volume.VolumeId,loggedUser.Role);
-                CurrentPage = 1;
-                PageNumberButton.Content = CurrentPage.ToString();
-                List<ArticlesDto> articles = await _articlesRepository.GetArticlesDtoByVolumeId(volume.VolumeId, CurrentPage, loggedUser.Role);
-                DataGrid.AutoGenerateColumns = true;
-                operationsColumn.Visibility = Visibility.Hidden;
-                DataGrid.ColumnWidth = DataGridLength.Auto;
-                DataGrid.ItemsSource = articles;
+                    LastTypeLoaded = ObjectType.Articles;
+                    ArticlesButton_Click(sender, e);
             }
 
-            if (LastTypeLoaded == ObjectType.Journals)
-            {
+                if (LastTypeLoaded == ObjectType.Journals)
+                {
+                    Button button = sender as Button;
+                    JournalsDto journal = button.DataContext as JournalsDto;
+                try
+                {
+                    LastJournalId = journal.JournalId;
+                    NumberOfPages = await _volumesRepository.GetVolumesNumberOfPagesByJournalId(journal.JournalId);
+                    CurrentPage = 1;
+                    PageNumberButton.Content = CurrentPage.ToString();
+                    List<VolumesDto> volumes = await _volumesRepository.GetVolumesDtoByJournalId(journal.JournalId, CurrentPage);
+                    DataGrid.AutoGenerateColumns = true;
+                    operationsColumn.Visibility = Visibility.Visible;
+                    DataGrid.ColumnWidth = DataGridLength.Auto;
+                    DataGrid.ItemsSource = volumes;
+                }
+                catch (Exception ex)
+                {
+                    return;
+                }
+
                 LastTypeLoaded = ObjectType.Volumes;
+                    VolumesButton_Click(sender, e);
+                    operationsColumn.Header = "Go to Articles";
+                }
 
-                VolumesButton_Click(sender, e);
+                if (LastTypeLoaded == ObjectType.Publications)
+                {
+                    Button button = sender as Button;
+                    PublicationsDto publication = button.DataContext as PublicationsDto;
 
-                operationsColumn.Header = "Go to Articles";
-                Button button = sender as Button;
-                JournalsDto journal = button.DataContext as JournalsDto;
+                try
+                {
+                    LastPublicationId = publication.PublicationId;
+                    NumberOfPages = await _journalsRepository.GetJournalsNumberOfPagesByIdAsync(publication.PublicationId);
+                    CurrentPage = 1;
+                    PageNumberButton.Content = CurrentPage.ToString();
+                    List<JournalsDto> journals = await _journalsRepository.GetJournalsDtoByPublicationIdAsync(publication.PublicationId, CurrentPage);
+                    DataGrid.AutoGenerateColumns = true;
+                    operationsColumn.Visibility = Visibility.Visible;
+                    DataGrid.ColumnWidth = DataGridLength.Auto;
+                    DataGrid.ItemsSource = journals;
+                }
+                catch (Exception ex)
+                {
+                    return;
+                }
 
-                LastJournalId = journal.JournalId;
-                NumberOfPages = await _volumesRepository.GetVolumesNumberOfPagesByJournalId(journal.JournalId);
-                CurrentPage = 1;
-                PageNumberButton.Content = CurrentPage.ToString();
-                List<VolumesDto> volumes = await _volumesRepository.GetVolumesDtoByJournalId(journal.JournalId, CurrentPage);
-                DataGrid.AutoGenerateColumns = true;
-                operationsColumn.Visibility = Visibility.Visible;
-                DataGrid.ColumnWidth = DataGridLength.Auto;
-                DataGrid.ItemsSource = volumes;
-            }
-
-            if (LastTypeLoaded == ObjectType.Publications)
-            {
                 LastTypeLoaded = ObjectType.Journals;
-
-                JournalsButton_Click(sender, e);
-
-                operationsColumn.Header = "Go to Volumes";
-                Button button = sender as Button;
-                PublicationsDto publication = button.DataContext as PublicationsDto;
-
-                LastPublicationId = publication.PublicationId;
-                NumberOfPages = await _journalsRepository.GetJournalsNumberOfPagesByIdAsync(publication.PublicationId);
-                CurrentPage = 1;
-                PageNumberButton.Content = CurrentPage.ToString();
-                List<JournalsDto> journals = await _journalsRepository.GetJournalsDtoByPublicationIdAsync(publication.PublicationId, CurrentPage);
-                DataGrid.AutoGenerateColumns = true;
-                operationsColumn.Visibility = Visibility.Visible;
-                DataGrid.ColumnWidth = DataGridLength.Auto;
-                DataGrid.ItemsSource = journals;
-            }
+                    JournalsButton_Click(sender, e);
+                    operationsColumn.Header = "Go to Volumes";
+                }
+          
         }
 
         private async void ArticlesButton_Click(object sender, RoutedEventArgs e)
@@ -595,11 +614,19 @@ namespace View
             KeywordsComboBox.Visibility = Visibility.Visible;
             searchButton.Visibility = Visibility.Visible;
 
-            List<string> authors = await _authorsRepository.GetAuthorsAsync();
-            AuthorsComboBox.ItemsSource = authors;
+            try
+            {
 
-            List<string> keywords = await _keywordsRepository.GetKeywordsAsync();
-            KeywordsComboBox.ItemsSource = keywords;          
+                List<string> authors = await _authorsRepository.GetAuthorsAsync();
+                AuthorsComboBox.ItemsSource = authors;
+
+                List<string> keywords = await _keywordsRepository.GetKeywordsAsync();
+                KeywordsComboBox.ItemsSource = keywords;
+            }
+            catch (Exception ex)
+            {
+                return;
+            }
         }
 
         private async void BooksButton_Click(object sender, RoutedEventArgs e)
@@ -617,8 +644,15 @@ namespace View
             KeywordsComboBox.Visibility = Visibility.Hidden;
             searchButton.Visibility = Visibility.Visible;
 
-            List<string> authors = await _authorsRepository.GetAuthorsAsync();
-            AuthorsComboBox.ItemsSource = authors;
+            try
+            {
+                List<string> authors = await _authorsRepository.GetAuthorsAsync();
+                AuthorsComboBox.ItemsSource = authors;
+            }
+            catch(Exception ex) 
+            {
+                return;
+            }
         }
 
         private void JournalsButton_Click(object sender, RoutedEventArgs e)
