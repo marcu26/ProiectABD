@@ -9,7 +9,7 @@
     xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
     Title="Science Time" Height="600" Width="560" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" ShowBackButton="False" ShowStatusPanel="True" TitleAlignment="Left"
     Background="Transparent"
-    Icon="Backgrounds\clock_icon.png">
+    Icon="Backgrounds\clock_icon.png" KeyDown="ThemedWindow_KeyDown">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
@@ -27,8 +27,9 @@
             </Grid.RowDefinitions>
 
 
-            <Grid x:Name="LabelGrid" Width="420" VerticalAlignment="Center" Height="40">
-                <Label x:Name="LogLabel" VerticalAlignment="Center" FontSize="20" Content="Log In" HorizontalAlignment="Center" FontFamily="Bookman Old Style" FontWeight="Bold" Foreground="#FF6741D9"></Label>
+            <Grid x:Name="LabelGrid" Width="420" VerticalAlignment="Center" Height="80">
+                <Label x:Name="LogLabel" Margin="0 5 0 0" VerticalAlignment="Top" FontSize="22" Content="Log In" HorizontalAlignment="Center" FontFamily="Bookman Old Style" FontWeight="Bold" Foreground="#FF6741D9"></Label>
+                <Label x:Name="InstructionLabel" Margin ="0 40 0 0" VerticalAlignment="Top" FontSize="14" Content="Instructions" HorizontalAlignment="Center" FontFamily="Bookman Old Style" FontWeight="Bold" Foreground="#FF6741D9 " Visibility="Hidden"></Label>
             </Grid>
 
             <Grid x:Name="FullnameGrid" Width="420" HorizontalAlignment="Center" Margin="0,0,0,20" Grid.Row="2" Visibility="Hidden">

@@ -57,7 +57,7 @@ namespace View
                     isResettingPasswordStep2 = true;
                     isResettingPasswordStep1 = false;
                     EmailTextBox.Text = string.Empty;
-
+                    InstructionLabel.Content = "Check your email for the verify code.\n    Make sure to check Spam folder!";
 
                     return;
                 }
@@ -140,7 +140,9 @@ namespace View
 
                 try
                 {
-                    loggedUser = await _usersRepository.CreateUserAsync(email, fullname, password, 1);
+                    await _usersRepository.CreateUserAsync(email, fullname, password, 1);
+                    CancelButton_Click(sender, e);
+                    return;
                 }catch(Exception ex)
                 {
                     MessageBox.Show(ex.Message, "Warning!", MessageBoxButton.OK, MessageBoxImage.Warning);
@@ -174,6 +176,7 @@ namespace View
             ConfirmPasswordGrid.Visibility = Visibility.Visible;
             FullnameGrid.Visibility = Visibility.Visible;
             CancelButton.Visibility = Visibility.Visible;
+            RegisterButton.Visibility = Visibility.Hidden;
             isLogInMode = false;
         }
 
@@ -192,14 +195,18 @@ namespace View
             GuestLogInButton.Visibility = Visibility.Visible;
             ForgotPasswordButton.Visibility = Visibility.Visible;
 
+            InstructionLabel.Visibility = Visibility.Hidden;
             LogInButtonIcon.Kind = MahApps.Metro.IconPacks.PackIconMaterialKind.LoginVariant;
             LogInButtonIcon.Visibility= Visibility.Visible;
+            TextBlockEmail.Text = "Email";
             LogInButton.Content = "Log In";
             LogLabel.Content = "Log In";
             PasswordGrid.Visibility = Visibility.Visible;
             FullnameGrid.Visibility = Visibility.Hidden;
             ConfirmPasswordGrid.Visibility = Visibility.Hidden;
             CancelButton.Visibility = Visibility.Hidden;
+            RegisterButton.Visibility = Visibility.Visible;
+
             isLogInMode = true;
         }
 
@@ -212,6 +219,10 @@ namespace View
             PasswordGrid.Visibility = Visibility.Hidden;
             LogLabel.Content = "Email for reseting your password";
             LogInButton.Content = "Send email";
+            InstructionLabel.Visibility = Visibility.Visible;
+            RegisterButton.Visibility = Visibility.Hidden;
+            InstructionLabel.Content = "Check your email for the verify code.\n    Make sure to check Spam folder!";
+            EmailTextBox.Text = String.Empty;
             LogInButtonIcon.Kind = MahApps.Metro.IconPacks.PackIconMaterialKind.EmailFast;
         }
 
@@ -255,6 +266,14 @@ namespace View
             if (ConfirmPasswordTextBox.Password.Length == 0)
             {
                 TextBlockConfirmPassword.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void ThemedWindow_KeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Enter) 
+            {
+                LogInButton_Click(sender, e);
             }
         }
     }

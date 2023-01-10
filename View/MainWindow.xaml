@@ -10,7 +10,7 @@
     x:Class="View.MainWindow"
     Title="Science Time" Height="900" Width="1750" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" ShowBackButton="False" ShowStatusPanel="True" TitleAlignment="Left"
     Background="Transparent"
-    Icon="Backgrounds\clock_icon.png">
+    Icon="Backgrounds\clock_icon.png" KeyDown="ThemedWindow_KeyDown">
 
     <Window.Resources>
         <BooleanToVisibilityConverter x:Key="BoolToVis" />
@@ -110,7 +110,14 @@
                                 <TextBox x:Name="endYearTextBox" Margin="30 10" Text="To" GotFocus="endYearTextBox_GotFocus" LostFocus="endYearTextBox_LostFocus"></TextBox>
                             </StackPanel>
 
-                            
+                            <Button x:Name="LogOutButton" Style="{StaticResource menuButton}" Click="LogOutButton_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <Icon:PackIconMaterial Kind="LogoutVariant" Style="{StaticResource menuButtonIcon}"/>
+                                    <TextBlock Text="Log Out" FontSize="18"/>
+                                </StackPanel>
+                            </Button>
+
+
 
 
                         </StackPanel>
