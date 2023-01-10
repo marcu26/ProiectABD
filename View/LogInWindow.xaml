@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
     mc:Ignorable="av" 
     xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
-    Title="Science Time" Height="500" Width="500" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" ShowBackButton="False" ShowStatusPanel="True" TitleAlignment="Center"
+    Title="Science Time" Height="600" Width="560" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" ShowBackButton="False" ShowStatusPanel="True" TitleAlignment="Left"
     Background="Transparent"
     Icon="Backgrounds\clock_icon.png">
 
@@ -18,6 +18,8 @@
     <Border CornerRadius="10" Background="#EFF2F7">
         <Grid Grid.Column="1" Margin="40 20 40 20">
             <Grid.RowDefinitions>
+                <RowDefinition Height="80"/>
+                <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
                 <RowDefinition Height="auto"/>
@@ -25,46 +27,66 @@
             </Grid.RowDefinitions>
 
 
-            <Grid x:Name="EmailGrid" Width="420" HorizontalAlignment="Left" Margin="0 0">
-                <TextBlock x:Name="TextBlockEmail" Margin="20 0" VerticalAlignment="Center" Foreground="#B0B9C6" IsHitTestVisible="False"
+            <Grid x:Name="LabelGrid" Width="420" VerticalAlignment="Center" Height="40">
+                <Label x:Name="LogLabel" VerticalAlignment="Center" FontSize="20" Content="Log In" HorizontalAlignment="Center" FontFamily="Bookman Old Style" FontWeight="Bold" Foreground="#FF6741D9"></Label>
+            </Grid>
+
+            <Grid x:Name="FullnameGrid" Width="420" HorizontalAlignment="Center" Margin="0,0,0,20" Grid.Row="2" Visibility="Hidden">
+                <TextBlock x:Name="TextBlockFullname" Margin="20 0 0 0" VerticalAlignment="Center" Foreground="#B0B9C6" IsHitTestVisible="False"
+                           Panel.ZIndex="1" Text="Fullname"
+                           Visibility="{Binding ElementName=FullnameTextBox, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
+
+                <TextBox Name="FullnameTextBox" Style="{StaticResource searchTextbox}" Margin="0 0 15 0"/>
+            </Grid>
+
+            <Grid x:Name="EmailGrid" Width="420" HorizontalAlignment="Center" Margin="0 0" Grid.Row="3">
+                <TextBlock x:Name="TextBlockEmail" Margin="20 0 0 0" VerticalAlignment="Center" Foreground="#B0B9C6" IsHitTestVisible="False"
                            Panel.ZIndex="1" Text="Email"
-                           Visibility="{Binding ElementName=UsernameTextBox, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
+                           Visibility="{Binding ElementName=EmailTextBox, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
 
                 <TextBox Name="EmailTextBox" Style="{StaticResource searchTextbox}" Margin="0 0 15 0"/>
             </Grid>
 
 
-            <Grid x:Name="PasswordGrid" Width="420" VerticalAlignment="Top" Grid.Row="2">
-                <TextBlock x:Name="TextBlockPassword" Margin="20 30 0 0" VerticalAlignment="Center" Foreground="#B0B9C6" IsHitTestVisible="False"
+            <Grid x:Name="PasswordGrid" Width="420" VerticalAlignment="Top" HorizontalAlignment="Center" Grid.Row="4">
+                <TextBlock x:Name="TextBlockPassword" Margin="20,30,0,0" VerticalAlignment="Top" Foreground="#B0B9C6" IsHitTestVisible="False"
                            Panel.ZIndex="1" Text="Password"
                            Visibility="{Binding ElementName=PasswordTextBox, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
 
-                <TextBox Name="PasswordTextBox" Style="{StaticResource searchTextbox}" Margin="0 30 15 0"/>
+                <TextBox Name="PasswordTextBox" Style="{StaticResource searchTextbox}" Margin="0 20 15 0"/>
             </Grid>
 
-            <Grid x:Name="ConfirmPasswordGrid" Width="420" VerticalAlignment="Top" Grid.Row="3" Margin="0,10,0,0">
-                <TextBlock x:Name="TextBlockConfirmPassword" Margin="20 20 0 0" VerticalAlignment="Center" Foreground="#B0B9C6" IsHitTestVisible="False"
+            <Grid x:Name="ConfirmPasswordGrid" Width="420" VerticalAlignment="Top" Grid.Row="5" Margin="0,10,0,0" Visibility="Hidden">
+                <TextBlock x:Name="TextBlockConfirmPassword" Margin="20 10 0 0" VerticalAlignment="Center" Foreground="#B0B9C6" IsHitTestVisible="False"
                            Panel.ZIndex="1" Text="Confirm Password"
-                           Visibility="{Binding ElementName=PasswordTextBox, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
+                           Visibility="{Binding ElementName=ConfirmPasswordTextBox, Path=Text.IsEmpty, Converter={StaticResource BoolToVis}}" />
 
-                <TextBox Name="ConfirmPasswordTextBox" Style="{StaticResource searchTextbox}" Margin="0 20 15 0"/>
+                <TextBox Name="ConfirmPasswordTextBox" Style="{StaticResource searchTextbox}" Margin="0 10 15 0"/>
             </Grid>
 
-            <Grid x:Name="LoginButtonsGrid" Grid.Row="4" Margin="0,60,0,0" HorizontalAlignment="Left" Width="420">
-                <Button x:Name="LogInButton" Style="{StaticResource addButton}" HorizontalAlignment="Left" Margin="30,20,0,20" Click="LogInButton_Click">
+            <Grid x:Name="ButtonsGrid" Grid.Row="5" Margin="0,60,0,0" HorizontalAlignment="Center" Width="480">
+                <Button x:Name="LogInButton" Style="{StaticResource addButton}" HorizontalAlignment="Left" Margin="30,0,0,20" Click="LogInButton_Click">
                     <StackPanel Orientation="Horizontal">
                         <Icon:PackIconMaterial Kind="LoginVariant" VerticalAlignment="Center" Margin="0 1 8 0" Width="11" Height="11"/>
                         <TextBlock Text="Log In"/>
                     </StackPanel>
                 </Button>
 
-                <Button x:Name="RegisterButton" Style="{StaticResource addButton}" HorizontalAlignment="Left" Margin="240,20,0,20">
+                <Button x:Name="RegisterButton" Style="{StaticResource addButton}" HorizontalAlignment="Left" Margin="300,0,0,20" Click="RegisterButton_Click">
                     <StackPanel Orientation="Horizontal">
                         <Icon:PackIconMaterial Kind="PenPlus" VerticalAlignment="Center" Margin="0 1 8 0" Width="11" Height="11"/>
                         <TextBlock Text="Register"/>
                     </StackPanel>
                 </Button>
+
+                <Button x:Name="CancelButton" Style="{StaticResource addButton}" HorizontalAlignment="Center" Margin="0 100 0 0" Click="CancelButton_Click" Visibility="Hidden">
+                    <StackPanel Orientation="Horizontal">
+                        <Icon:PackIconMaterial Kind="Cancel" VerticalAlignment="Center" Margin="0 1 8 0" Width="11" Height="11"/>
+                        <TextBlock Text="Cancel"/>
+                    </StackPanel>
+                </Button>
             </Grid>
+
 
 
 

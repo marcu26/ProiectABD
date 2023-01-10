@@ -8,7 +8,7 @@
     mc:Ignorable="av" 
     xmlns:Icon="http://metro.mahapps.com/winfx/xaml/iconpacks"
     x:Class="View.MainWindow"
-    Title="Science Time" Height="900" Width="1750" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" ShowBackButton="False" ShowStatusPanel="True" TitleAlignment="Center"
+    Title="Science Time" Height="900" Width="1750" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" ShowBackButton="False" ShowStatusPanel="True" TitleAlignment="Left"
     Background="Transparent"
     Icon="Backgrounds\clock_icon.png">
 

@@ -51,11 +51,13 @@ namespace Core.Repositories
                 throw new Exception($"User cu emailul {email} exista deja");
             }
 
+            password = Encode(password);
+
             var user = new User
             {
                 Email = email,
                 FullName = fullName,
-                Password = Encode(password),
+                Password = password,
                 Role = role
             };
 
@@ -66,7 +68,8 @@ namespace Core.Repositories
 
         public async Task<UserDto> LoginByEmailAndPassword(string email, string password)
         {
-            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == Encode(password));
+            password= Encode(password);
+            var user = await _dbContext.Users.FirstOrDefaultAsync(u => u.Email == email && u.Password == password);
 
             if (user == null)
             {
