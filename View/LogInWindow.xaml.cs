@@ -230,7 +230,7 @@ namespace View
         {
             try
             {
-                loggedUser = await _usersRepository.LoginByEmailAndPassword("guest", "guest");
+                loggedUser = new UserDto { Email="guest", FullName="guest", Role=2};
             }
             catch(Exception ex)
             {
